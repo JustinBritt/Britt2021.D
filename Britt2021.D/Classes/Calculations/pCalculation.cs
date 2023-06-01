@@ -35,9 +35,9 @@
             ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>();
 
             int lengthOfStayMaximum = surgeonLengthOfStayMaximums
-                    .Where(i => i.Key == surgeon)
-                    .Select(i => i.Value.Value.Value)
-                    .SingleOrDefault();
+                .Where(i => i.Key == surgeon)
+                .Select(i => i.Value.Value.Value)
+                .SingleOrDefault();
 
             using (DiscreteHalfNormal.Interfaces.Calculations.IqθμCalculation qθμCalculation =
                 DiscreteHalfNormal.AbstractFactories.AbstractFactory.Create().CreateCalculationsAbstractFactory().CreateqθμCalculationFactory().Create(lengthOfStayMaximum))
