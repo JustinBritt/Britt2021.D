@@ -15,7 +15,7 @@
             ILogNormalFactory logNormalFactory,
             PositiveInt cluster,
             double µ,
-            ImmutableList<PositiveInt> scenarios,
+            ImmutableList<INullableValue<int>> scenarios,
             double σ,
             Organization surgeon);
     }

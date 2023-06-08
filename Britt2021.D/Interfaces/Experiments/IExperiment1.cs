@@ -67,7 +67,7 @@
         /// Index: Λ
         /// Used in: 1B, 2, 4, 5
         /// </summary>
-        ImmutableList<PositiveInt> Scenarios { get; }
+        ImmutableList<INullableValue<int>> Scenarios { get; }
 
         /// <summary>
         /// Gets the operating room service levels
@@ -101,7 +101,7 @@
         /// Parameter: h(i, Λ)
         /// Used in: 2
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, Duration>> WeightedAverageSurgicalDurations { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
 
         /// <summary>
         /// Gets SurgeonLengthOfStayMaximums.
@@ -122,7 +122,7 @@
         /// Parameter: n(s, Λ)
         /// Used in: 1B, 2
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>> SurgeonScenarioMaximumNumberPatients { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <summary>
         /// Gets the service level probabilities.
@@ -136,7 +136,7 @@
         /// Parameter: p(s, l, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <summary>
         /// Gets the number of days per week.
@@ -170,14 +170,14 @@
         /// Parameter: μ(s, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <summary>
         /// Gets the scenario probabilities.
         /// Parameter: Ρ(Λ)
         /// Used in: 1B, 2, 4, 5
         /// </summary>
-        ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>> ScenarioProbabilities { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ScenarioProbabilities { get; }
 
         /// <summary>
         /// Gets the surgical durations.
@@ -190,7 +190,7 @@
         /// Parameter: σ(s, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <summary>
         /// Gets DayAvailabilities.

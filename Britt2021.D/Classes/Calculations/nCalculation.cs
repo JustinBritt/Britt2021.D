@@ -19,9 +19,9 @@
         {
         }
 
-        public ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>> Calculate(
+        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> Calculate(
             INullableValueFactory nullableValueFactory,
-            ImmutableList<Tuple<Organization, PositiveInt, Duration>> h,
+            ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> h,
             Duration Η)
         {
             return h
