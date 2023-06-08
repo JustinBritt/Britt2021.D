@@ -129,7 +129,7 @@
         /// Parameter: P(υ1)
         /// Used in: 1A
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ServiceLevelProbabilities { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
 
         /// <summary>
         /// Gets SurgeonDayScenarioLengthOfStayProbabilities.

@@ -507,7 +507,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ServiceLevelProbabilities { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
@@ -1119,27 +1119,27 @@
         }
 
         // Parameter: P(υ1)
-        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> GenerateServiceLevelProbabilities(
+        private ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> GenerateServiceLevelProbabilities(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDecimal>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>();
 
             builder.Add(
                 KeyValuePair.Create(
                     this.OperatingRoomServiceLevels[0],
-                    (FhirDecimal)nullableValueFactory.Create<decimal>(
+                    nullableValueFactory.Create<decimal>(
                         0.75m)));
 
             builder.Add(
                 KeyValuePair.Create(
                     this.OperatingRoomServiceLevels[1],
-                    (FhirDecimal)nullableValueFactory.Create<decimal>(
+                    nullableValueFactory.Create<decimal>(
                         0.85m)));
 
             builder.Add(
                 KeyValuePair.Create(
                     this.OperatingRoomServiceLevels[2],
-                    (FhirDecimal)nullableValueFactory.Create<decimal>(
+                    nullableValueFactory.Create<decimal>(
                         0.95m)));
 
             return builder.ToImmutableList();
