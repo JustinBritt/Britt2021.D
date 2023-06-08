@@ -522,7 +522,7 @@
         public ImmutableList<Tuple<Organization, Device, FhirBoolean>> SurgeonMachineRequirements { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> SurgicalOverheads { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalOverheads { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
@@ -1277,7 +1277,7 @@
         }
 
         // Parameter: θ(s, k)
-        private ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GenerateSurgicalOverheads(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> GenerateSurgicalOverheads(
             INullableValueFactory nullableValueFactory,
             IContinuousUniformFactory continuousUniformFactory,
             double lower,
@@ -1287,11 +1287,11 @@
                 lower: lower,
                 upper: upper);
 
-            ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, FhirDecimal>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                foreach (PositiveInt cluster in this.Clusters)
+                foreach (INullableValue<int> cluster in this.Clusters)
                 {
                     builder.Add(
                         Tuple.Create(

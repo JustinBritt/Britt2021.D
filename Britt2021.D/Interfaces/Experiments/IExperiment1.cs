@@ -163,7 +163,7 @@
         /// Gets the surgical overheads.
         /// Parameter: θ(s, k)
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> SurgicalOverheads { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalOverheads { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientMeans.
