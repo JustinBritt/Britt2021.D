@@ -21,16 +21,16 @@
         {
         }
 
-        public ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> CalculateLogNormal(
+        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> CalculateLogNormal(
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
-            PositiveInt cluster,
+            INullableValue<int> cluster,
             double µ,
             ImmutableList<INullableValue<int>> scenarios,
             double σ,
             Organization surgeon)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>();
 
             // https://stackoverflow.com/questions/48014712/get-lognormal-random-number-given-log10-mean-and-log10-standard-deviation/48016650#48016650
             if (µ != 0)
@@ -49,24 +49,26 @@
 
                 foreach (PositiveInt scenario in scenarios)
                 {
-                    builder.Add(Tuple.Create(
-                        surgeon,
-                        cluster,
-                        scenario,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
-                            (decimal)logNormal.Sample())));
+                    builder.Add(
+                        Tuple.Create(
+                            surgeon,
+                            cluster,
+                            scenario,
+                            (FhirDecimal)nullableValueFactory.Create<decimal>(
+                                (decimal)logNormal.Sample())));
                 }
             }
             else
             {
                 foreach (PositiveInt scenario in scenarios)
                 {
-                    builder.Add(Tuple.Create(
-                        surgeon,
-                        cluster,
-                        scenario,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
-                            0m)));
+                    builder.Add(
+                        Tuple.Create(
+                            surgeon,
+                            cluster,
+                            scenario,
+                            (FhirDecimal)nullableValueFactory.Create<decimal>(
+                                0m)));
                 }
             }
             

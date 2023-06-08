@@ -183,7 +183,7 @@
         /// Gets the surgical durations.
         /// Parameter: ρ(s, k, Λ)
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> SurgicalDurations { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> SurgicalDurations { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientStandardDeviations.

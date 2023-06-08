@@ -10,10 +10,10 @@
 
     public interface IρCalculation
     {
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> CalculateLogNormal(
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> CalculateLogNormal(
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
-            PositiveInt cluster,
+            INullableValue<int> cluster,
             double µ,
             ImmutableList<INullableValue<int>> scenarios,
             double σ,

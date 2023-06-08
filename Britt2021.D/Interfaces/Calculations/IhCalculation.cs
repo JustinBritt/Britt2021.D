@@ -16,6 +16,6 @@
             ImmutableList<INullableValue<int>> scenarios,
             ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> f,
             ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> θ,
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> ρ);
+            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> ρ);
     }
 }
