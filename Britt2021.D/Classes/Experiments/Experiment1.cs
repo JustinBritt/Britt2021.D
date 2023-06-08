@@ -510,7 +510,7 @@
         public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <inheritdoc />
         public INullableValue<int> NumberDaysPerWeek { get; }
@@ -1146,14 +1146,14 @@
         }
 
         // Parameter: p(s, l, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
             IpCalculation pCalculation,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>();
 
             VanOostrum2011.InterfacesAbstractFactories.IAbstractFactory abstractFactory = VanOostrum2011.AbstractFactories.AbstractFactory.Create();
             VanOostrum2011.InterfacesAbstractFactories.IContextsAbstractFactory contextsAbstractFactory = abstractFactory.CreateContextsAbstractFactory();
@@ -1482,13 +1482,13 @@
         {
             ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
 
-            foreach (Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal> item in this.SurgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item3 == scenario))
+            foreach (Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>> item in this.SurgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item3 == scenario))
             {
                 builder.Add(
                     Tuple.Create(
                         item.Item1,
                         this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == item.Item2.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
-                        item.Item4));
+                        (FhirDecimal)item.Item4));
             }
 
             return builder.ToImmutableList();

@@ -23,7 +23,7 @@
         {
         }
 
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> GenerateScenarios(
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> GenerateScenarios(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
             ImmutableList<INullableValue<int>> lengthOfStayDays,
@@ -32,7 +32,7 @@
             ImmutableList<KeyValuePair<Organization, INullableValue<int>>> surgeonLengthOfStayMaximums,
             double targetMean)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>();
 
             int lengthOfStayMaximum = surgeonLengthOfStayMaximums
                 .Where(i => i.Key == surgeon)
@@ -77,7 +77,7 @@
                                 surgeon,
                                 lengthOfStayDays.Where(i => i.Value.Value == item.x).SingleOrDefault(),
                                 scenarios[w],
-                                (FhirDecimal)nullableValueFactory.Create<decimal>(
+                                nullableValueFactory.Create<decimal>(
                                     (decimal)item.p)));
                     }
 
@@ -88,7 +88,7 @@
                                 surgeon,
                                 item,
                                 scenarios[w],
-                                (FhirDecimal)nullableValueFactory.Create<decimal>(
+                                nullableValueFactory.Create<decimal>(
                                     0)));
                     }
                 }

@@ -136,7 +136,7 @@
         /// Parameter: p(s, l, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <summary>
         /// Gets the number of days per week.
