@@ -94,7 +94,7 @@
         /// Gets the surgical frequencies.
         /// Parameter: f(s, k)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalFrequencies { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
 
         /// <summary>
         /// Gets the weighted average surgical durations.
