@@ -163,7 +163,7 @@
         /// Gets the surgical overheads.
         /// Parameter: θ(s, k)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalOverheads { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientMeans.
@@ -183,7 +183,7 @@
         /// Gets the surgical durations.
         /// Parameter: ρ(s, k, Λ)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgicalDurations { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientStandardDeviations.

@@ -522,7 +522,7 @@
         public ImmutableList<Tuple<Organization, Device, FhirBoolean>> SurgeonMachineRequirements { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalOverheads { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
@@ -531,7 +531,7 @@
         public ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ScenarioProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgicalDurations { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
@@ -1277,7 +1277,7 @@
         }
 
         // Parameter: θ(s, k)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> GenerateSurgicalOverheads(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalOverheads(
             INullableValueFactory nullableValueFactory,
             IContinuousUniformFactory continuousUniformFactory,
             double lower,
@@ -1287,7 +1287,7 @@
                 lower: lower,
                 upper: upper);
 
-            ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
@@ -1297,7 +1297,7 @@
                         Tuple.Create(
                             surgeon,
                             cluster,
-                            (FhirDecimal)nullableValueFactory.Create<decimal>(
+                            nullableValueFactory.Create<decimal>(
                                 (decimal)continuousUniform.Sample())));
                 }
             }
@@ -1356,7 +1356,7 @@
         }
 
         // Parameter: ρ(s, k, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> GenerateSurgicalDurationsVanHoudenhoven2007(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalDurationsVanHoudenhoven2007(
             IDurationFactory durationFactory,
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
@@ -1366,7 +1366,7 @@
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>>();
 
             VanHoudenhoven2007.InterfacesAbstractFactories.IAbstractFactory abstractFactory = VanHoudenhoven2007.AbstractFactories.AbstractFactory.Create();
 
