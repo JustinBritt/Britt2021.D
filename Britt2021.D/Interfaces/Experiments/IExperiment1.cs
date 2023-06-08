@@ -81,7 +81,7 @@
         /// Parameter: A(s, υ1)
         /// Used in: 1A, 1B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <summary>
         /// Gets the machine costs.

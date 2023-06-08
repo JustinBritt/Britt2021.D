@@ -486,7 +486,7 @@
         public ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Device, Money>> MachineCosts { get; }
@@ -970,10 +970,10 @@
         }
 
         // Parameter: A(s, υ1)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> GenerateSurgeonServiceLevelNumberTimeBlocks(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> GenerateSurgeonServiceLevelNumberTimeBlocks(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>>.Builder surgeonServiceLevelNumberTimeBlocksBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, PositiveInt>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>>.Builder surgeonServiceLevelNumberTimeBlocksBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>>>();
 
             foreach (Organization surgeon in Surgeons.Entry.Select(x => (Organization)x.Resource))
             {
@@ -981,21 +981,21 @@
                         Tuple.Create(
                             surgeon,
                             this.OperatingRoomServiceLevels[0],
-                            (PositiveInt)nullableValueFactory.Create<int>(
+                            nullableValueFactory.Create<int>(
                                 4)));
 
                 surgeonServiceLevelNumberTimeBlocksBuilder.Add(
                         Tuple.Create(
                             surgeon,
                             this.OperatingRoomServiceLevels[1],
-                            (PositiveInt)nullableValueFactory.Create<int>(
+                            nullableValueFactory.Create<int>(
                                 8)));
 
                 surgeonServiceLevelNumberTimeBlocksBuilder.Add(
                         Tuple.Create(
                             surgeon,
                             this.OperatingRoomServiceLevels[2],
-                            (PositiveInt)nullableValueFactory.Create<int>(
+                            nullableValueFactory.Create<int>(
                                 12)));
             }
 
