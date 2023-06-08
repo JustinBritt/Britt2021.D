@@ -540,7 +540,7 @@
         public ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> DayAvailabilities { get; }
 
         /// <inheritdoc />
-        public PositiveInt MaximumNumberRecoveryWardBeds { get; }
+        public INullableValue<int> MaximumNumberRecoveryWardBeds { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> SurgeonPenaltyWeights { get; }
@@ -1894,7 +1894,7 @@
                 builder.Add(
                     KeyValuePair.Create(
                         day,
-                        this.MaximumNumberRecoveryWardBeds));
+                        (PositiveInt)this.MaximumNumberRecoveryWardBeds));
             }
 
             return builder.ToImmutableList();

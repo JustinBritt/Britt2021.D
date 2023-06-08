@@ -204,7 +204,7 @@
         /// Parameter: Ω
         /// Used in: 3B
         /// </summary>
-        PositiveInt MaximumNumberRecoveryWardBeds { get; }
+        INullableValue<int> MaximumNumberRecoveryWardBeds { get; }
 
         /// <summary>
         /// Gets SurgeonPenaltyWeights.
