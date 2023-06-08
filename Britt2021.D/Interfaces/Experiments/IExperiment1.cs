@@ -197,7 +197,7 @@
         /// Parameter: ψ(t)
         /// Used in: 1A, 1B, 3A, 3B
         /// </summary>
-        ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> DayAvailabilities { get; }
+        ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>> DayAvailabilities { get; }
 
         /// <summary>
         /// Gets the maximum number of recovery ward beds.

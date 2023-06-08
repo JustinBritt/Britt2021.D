@@ -537,7 +537,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> DayAvailabilities { get; }
+        public ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>> DayAvailabilities { get; }
 
         /// <inheritdoc />
         public INullableValue<int> MaximumNumberRecoveryWardBeds { get; }
@@ -1209,13 +1209,13 @@
         }
 
         // Parameter: ψ(t)
-        private ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> GenerateDayAvailabilitiesAllOperatingRoomsUnavailableOnWeekends(
+        private ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>> GenerateDayAvailabilitiesAllOperatingRoomsUnavailableOnWeekends(
             IFhirDateTimeFactory FhirDateTimeFactory,
             INullableValueFactory nullableValueFactory,
             DateTime endDate,
             DateTime startDate)
         {
-            ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, FhirBoolean>>();
+            ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<bool>>>();
 
             for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
             {
@@ -1225,7 +1225,7 @@
                        KeyValuePair.Create(
                            FhirDateTimeFactory.Create(
                                dt),
-                           (FhirBoolean)nullableValueFactory.Create<bool>(
+                           nullableValueFactory.Create<bool>(
                                true)));
                 }
                 else
@@ -1234,7 +1234,7 @@
                        KeyValuePair.Create(
                            FhirDateTimeFactory.Create(
                                dt),
-                           (FhirBoolean)nullableValueFactory.Create<bool>(
+                           nullableValueFactory.Create<bool>(
                                false)));
                 }
             }
