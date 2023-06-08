@@ -122,7 +122,7 @@
         /// Parameter: n(s, Λ)
         /// Used in: 1B, 2
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonScenarioMaximumNumberPatients { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <summary>
         /// Gets the service level probabilities.
