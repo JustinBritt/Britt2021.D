@@ -543,7 +543,7 @@
         public PositiveInt MaximumNumberRecoveryWardBeds { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, FhirDecimal>> SurgeonPenaltyWeights { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> SurgeonPenaltyWeights { get; }
 
         /// <inheritdoc />
         public ImmutableList<PositiveInt> Belien2007LengthOfStayDays { get; }
@@ -1457,19 +1457,19 @@
         }
 
         // Parameter: ω(s)
-        private ImmutableList<KeyValuePair<Organization, FhirDecimal>> GenerateSurgeonPenaltyWeightsSameForAllSurgeons(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> GenerateSurgeonPenaltyWeightsSameForAllSurgeons(
             INullableValueFactory nullableValueFactory,
             Bundle surgeons,
             decimal penaltyWeight)
         {
-            ImmutableList<KeyValuePair<Organization, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, FhirDecimal>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<decimal>>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
                 builder.Add(
                     KeyValuePair.Create(
                         surgeon,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             penaltyWeight)));
             }
 
