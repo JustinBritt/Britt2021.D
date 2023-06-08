@@ -456,7 +456,7 @@
         public INullableValueFactory NullableValueFactory { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> Weekdays { get; }
+        public ImmutableList<INullableValue<int>> Weekdays { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, ImmutableList<Organization>>> SurgicalSpecialties { get; }
@@ -627,13 +627,13 @@
         private Organization SurgicalSpecialty7URO { get; }
 
         // Indices: d, d1, d2
-        private ImmutableList<PositiveInt> GenerateWeekdays(
+        private ImmutableList<INullableValue<int>> GenerateWeekdays(
             INullableValueFactory nullableValueFactory,
             int numberWeekdaysPerWeek)
         {
             return Enumerable
                 .Range(1, numberWeekdaysPerWeek)
-                .Select(i => (PositiveInt)nullableValueFactory.Create<int>(i))
+                .Select(i => nullableValueFactory.Create<int>(i))
                 .ToImmutableList();
         }
 
