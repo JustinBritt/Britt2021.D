@@ -143,7 +143,7 @@
         /// Parameter: W
         /// Used in: 3B, 4, 5
         /// </summary>
-        PositiveInt NumberDaysPerWeek { get; }
+        INullableValue<int> NumberDaysPerWeek { get; }
 
         /// <summary>
         /// Gets the time block length.
