@@ -74,14 +74,14 @@
         /// Index: υ1
         /// Used in: 1A, 1B
         /// </summary>
-        ImmutableList<PositiveInt> OperatingRoomServiceLevels { get; }
+        ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <summary>
         /// Gets SurgeonServiceLevelNumberTimeBlocks.
         /// Parameter: A(s, υ1)
         /// Used in: 1A, 1B
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <summary>
         /// Gets the machine costs.
@@ -129,7 +129,7 @@
         /// Parameter: P(υ1)
         /// Used in: 1A
         /// </summary>
-        ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>> ServiceLevelProbabilities { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ServiceLevelProbabilities { get; }
 
         /// <summary>
         /// Gets SurgeonDayScenarioLengthOfStayProbabilities.

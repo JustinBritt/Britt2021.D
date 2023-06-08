@@ -483,10 +483,10 @@
         public ImmutableList<INullableValue<int>> Scenarios { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> OperatingRoomServiceLevels { get; }
+        public ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Device, Money>> MachineCosts { get; }
@@ -507,7 +507,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>> ServiceLevelProbabilities { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
@@ -958,22 +958,22 @@
         // OperatingRoomServiceLevels
         // Index: υ1
         // Used in: 1A, 1B
-        private ImmutableList<PositiveInt> GenerateOperatingRoomServiceLevels(
+        private ImmutableList<INullableValue<int>> GenerateOperatingRoomServiceLevels(
             INullableValueFactory nullableValueFactory,
             int numberOperatingRoomServiceLevels)
         {
             return Enumerable
                 .Range(1, numberOperatingRoomServiceLevels)
-                .Select(i => (PositiveInt)nullableValueFactory.Create<int>(
+                .Select(i => nullableValueFactory.Create<int>(
                     i))
                 .ToImmutableList();
         }
 
         // Parameter: A(s, υ1)
-        private ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>> GenerateSurgeonServiceLevelNumberTimeBlocks(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> GenerateSurgeonServiceLevelNumberTimeBlocks(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt>>.Builder surgeonServiceLevelNumberTimeBlocksBuilder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, PositiveInt>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>>.Builder surgeonServiceLevelNumberTimeBlocksBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, PositiveInt>>();
 
             foreach (Organization surgeon in Surgeons.Entry.Select(x => (Organization)x.Resource))
             {
@@ -1119,10 +1119,10 @@
         }
 
         // Parameter: P(υ1)
-        private ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>> GenerateServiceLevelProbabilities(
+        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> GenerateServiceLevelProbabilities(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, FhirDecimal>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDecimal>>();
 
             builder.Add(
                 KeyValuePair.Create(
