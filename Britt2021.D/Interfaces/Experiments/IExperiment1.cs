@@ -25,7 +25,7 @@
         /// Gets the clusters.
         /// Index: k
         /// </summary>
-        ImmutableList<PositiveInt> Clusters { get; }
+        ImmutableList<INullableValue<int>> Clusters { get; }
 
         /// <summary>
         /// Gets the length of stay days.

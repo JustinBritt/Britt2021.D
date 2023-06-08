@@ -462,7 +462,7 @@
         public ImmutableList<Tuple<Organization, ImmutableList<Organization>>> SurgicalSpecialties { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> Clusters { get; }
+        public ImmutableList<INullableValue<int>> Clusters { get; }
 
         /// <inheritdoc />
         public ImmutableList<PositiveInt> LengthOfStayDays { get; }
@@ -850,13 +850,13 @@
         }
 
         // Index: k
-        private ImmutableList<PositiveInt> GenerateClusters(
+        private ImmutableList<INullableValue<int>> GenerateClusters(
             INullableValueFactory nullableValueFactory,
             int numberClusters)
         {
             return Enumerable
                 .Range(1, numberClusters)
-                .Select(i => (PositiveInt)nullableValueFactory.Create<int>(i))
+                .Select(i => nullableValueFactory.Create<int>(i))
                 .ToImmutableList();
         }
 
@@ -1022,7 +1022,7 @@
 
         // Parameter: f(s, k)
         private ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
-            ImmutableList<PositiveInt> clusters,
+            ImmutableList<INullableValue<int>> clusters,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
@@ -1361,7 +1361,7 @@
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
             IρCalculation ρCalculation,
-            ImmutableList<PositiveInt> clusters,
+            ImmutableList<INullableValue<int>> clusters,
             ImmutableList<PositiveInt> scenarios,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
@@ -1529,7 +1529,7 @@
                     {
                         int patientGroupValue = patientGroup.Value.Value;
 
-                        PositiveInt cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
+                        INullableValue<int> cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
 
                         Duration duration = this.DurationFactory.CreateHour(
                             surgicalDurations.Where(w => w.Item1 == surgeon && w.Item2 == cluster && w.Item3 == scenario).Select(w => w.Item4.Value.Value).SingleOrDefault()
@@ -1601,7 +1601,7 @@
 
                         int patientGroupValue = patientGroup.Value.Value;
 
-                        PositiveInt cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
+                        INullableValue<int> cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
 
                         decimal durationAsDecimal = Ma2013PatientGroupSurgeryDurations.Where(w => w.Key == patientGroup).Select(w => w.Value.Value.Value).SingleOrDefault();
 
@@ -1696,7 +1696,7 @@
 
                         int patientGroupValue = patientGroup.Value.Value;
 
-                        PositiveInt cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
+                        INullableValue<int> cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
 
                         decimal durationAsDecimal = Ma2013PatientGroupSurgeryDurations.Where(w => w.Key == patientGroup).Select(w => w.Value.Value.Value).SingleOrDefault();
 
