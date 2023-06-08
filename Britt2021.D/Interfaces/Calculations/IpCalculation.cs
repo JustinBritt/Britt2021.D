@@ -17,7 +17,7 @@
             ImmutableList<INullableValue<int>> lengthOfStayDays,
             ImmutableList<INullableValue<int>> scenarios,
             Organization surgeon,
-            ImmutableList<KeyValuePair<Organization, PositiveInt>> surgeonLengthOfStayMaximums,
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>> surgeonLengthOfStayMaximums,
             double targetMean);
     }
 }

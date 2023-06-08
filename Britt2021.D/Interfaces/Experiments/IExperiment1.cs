@@ -108,7 +108,7 @@
         /// Parameter and Index: L(s), l
         /// Used in: 4, 5 (indirectly)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, PositiveInt>> SurgeonLengthOfStayMaximums { get; }
+        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonLengthOfStayMaximums { get; }
 
         /// <summary>
         /// Gets SurgeonStrategicTargets.
