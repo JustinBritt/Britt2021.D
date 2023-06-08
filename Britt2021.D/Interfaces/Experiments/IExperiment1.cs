@@ -32,7 +32,7 @@
         /// Parameter and Index: l, L(s)
         /// Used in: 4, 5
         /// </summary>
-        ImmutableList<PositiveInt> LengthOfStayDays { get; }
+        ImmutableList<INullableValue<int>> LengthOfStayDays { get; }
 
         /// <summary>
         /// Gets the machines.
@@ -136,7 +136,7 @@
         /// Parameter: p(s, l, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <summary>
         /// Gets the number of days per week.

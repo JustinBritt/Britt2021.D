@@ -11,10 +11,10 @@
 
     public interface IpCalculation
     {
-        ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> GenerateScenarios(
+        ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> GenerateScenarios(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
-            ImmutableList<PositiveInt> lengthOfStayDays,
+            ImmutableList<INullableValue<int>> lengthOfStayDays,
             ImmutableList<PositiveInt> scenarios,
             Organization surgeon,
             ImmutableList<KeyValuePair<Organization, PositiveInt>> surgeonLengthOfStayMaximums,

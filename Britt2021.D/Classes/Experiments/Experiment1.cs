@@ -465,7 +465,7 @@
         public ImmutableList<INullableValue<int>> Clusters { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> LengthOfStayDays { get; }
+        public ImmutableList<INullableValue<int>> LengthOfStayDays { get; }
 
         /// <inheritdoc />
         public Bundle Machines { get; }
@@ -510,7 +510,7 @@
         public ImmutableList<KeyValuePair<PositiveInt, FhirDecimal>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <inheritdoc />
         public PositiveInt NumberDaysPerWeek { get; }
@@ -861,13 +861,13 @@
         }
 
         // Index: l, where L(s) is the maximum for surgical team s
-        private ImmutableList<PositiveInt> GenerateLengthOfStayDays(
+        private ImmutableList<INullableValue<int>> GenerateLengthOfStayDays(
             INullableValueFactory nullableValueFactory,
             int maximumLengthOfStay)
         {
             return Enumerable
                 .Range(0, maximumLengthOfStay + 1)
-                .Select(i => (PositiveInt)nullableValueFactory.Create<int>(i))
+                .Select(i => nullableValueFactory.Create<int>(i))
                 .ToImmutableList();
         }
 
@@ -1146,14 +1146,14 @@
         }
 
         // Parameter: p(s, l, Λ)
-        private ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
             IpCalculation pCalculation,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>();
 
             VanOostrum2011.InterfacesAbstractFactories.IAbstractFactory abstractFactory = VanOostrum2011.AbstractFactories.AbstractFactory.Create();
             VanOostrum2011.InterfacesAbstractFactories.IContextsAbstractFactory contextsAbstractFactory = abstractFactory.CreateContextsAbstractFactory();
@@ -1482,7 +1482,7 @@
         {
             ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
 
-            foreach (Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal> item in this.SurgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item3 == scenario))
+            foreach (Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal> item in this.SurgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item3 == scenario))
             {
                 builder.Add(
                     Tuple.Create(

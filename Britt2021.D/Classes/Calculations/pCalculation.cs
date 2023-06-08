@@ -23,16 +23,16 @@
         {
         }
 
-        public ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> GenerateScenarios(
+        public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>> GenerateScenarios(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
-            ImmutableList<PositiveInt> lengthOfStayDays,
+            ImmutableList<INullableValue<int>> lengthOfStayDays,
             ImmutableList<PositiveInt> scenarios,
             Organization surgeon,
             ImmutableList<KeyValuePair<Organization, PositiveInt>> surgeonLengthOfStayMaximums,
             double targetMean)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, PositiveInt, FhirDecimal>>();
 
             int lengthOfStayMaximum = surgeonLengthOfStayMaximums
                 .Where(i => i.Key == surgeon)
@@ -81,7 +81,7 @@
                                     (decimal)item.p)));
                     }
 
-                    foreach (PositiveInt item in lengthOfStayDays.Where(w => w.Value.Value > lengthOfStayMaximum))
+                    foreach (INullableValue<int> item in lengthOfStayDays.Where(w => w.Value.Value > lengthOfStayMaximum))
                     {
                         builder.Add(
                             Tuple.Create(
