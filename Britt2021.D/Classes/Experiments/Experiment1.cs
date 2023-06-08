@@ -492,7 +492,7 @@
         public ImmutableList<KeyValuePair<Device, Money>> MachineCosts { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> SurgicalFrequencies { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgicalFrequencies { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
@@ -1021,12 +1021,12 @@
         }
 
         // Parameter: f(s, k)
-        private ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
             ImmutableList<INullableValue<int>> clusters,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, FhirDecimal>>();
 
             VanHoudenhoven2007.InterfacesAbstractFactories.IAbstractFactory abstractFactory = VanHoudenhoven2007.AbstractFactories.AbstractFactory.Create();
             VanHoudenhoven2007.InterfacesAbstractFactories.IContextsAbstractFactory contextsAbstractFactory = abstractFactory.CreateContextsAbstractFactory();
@@ -1056,7 +1056,7 @@
 
                 foreach (Organization surgeon in item.Item2)
                 {
-                    foreach (PositiveInt cluster in clusters)
+                    foreach (INullableValue<int> cluster in clusters)
                     {
                         VanHoudenhoven2007.Interfaces.Contexts.SurgicalFrequencies.ISurgicalFrequencyInputContext surgicalFrequencyInputContext = contextsAbstractFactory.CreateSurgicalFrequencyInputContextFactory().Create(
                             category: cluster,
