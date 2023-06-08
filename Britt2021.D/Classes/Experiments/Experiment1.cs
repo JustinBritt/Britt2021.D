@@ -519,7 +519,7 @@
         public Duration TimeBlockLength { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, Device, FhirBoolean>> SurgeonMachineRequirements { get; }
+        public ImmutableList<Tuple<Organization, Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
@@ -1243,10 +1243,10 @@
         }
 
         // Parameter: ζ(s, m)
-        private ImmutableList<Tuple<Organization, Device, FhirBoolean>> GenerateSurgeonMachineRequirements(
+        private ImmutableList<Tuple<Organization, Device, INullableValue<bool>>> GenerateSurgeonMachineRequirements(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, Device, FhirBoolean>>.Builder surgeonMachineRequirementsBuilder = ImmutableList.CreateBuilder<Tuple<Organization, Device, FhirBoolean>>();
+            ImmutableList<Tuple<Organization, Device, INullableValue<bool>>>.Builder surgeonMachineRequirementsBuilder = ImmutableList.CreateBuilder<Tuple<Organization, Device, INullableValue<bool>>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(w => w.Resource is Organization).Select(w => (Organization)w.Resource))
             {
@@ -1258,7 +1258,7 @@
                             Tuple.Create(
                                 surgeon,
                                 machine,
-                                (FhirBoolean)nullableValueFactory.Create<bool>(
+                                nullableValueFactory.Create<bool>(
                                     true)));
                     }
                     else
@@ -1267,7 +1267,7 @@
                             Tuple.Create(
                                 surgeon,
                                 machine,
-                                (FhirBoolean)nullableValueFactory.Create<bool>(
+                                nullableValueFactory.Create<bool>(
                                     false)));
                     }
                 }
