@@ -528,7 +528,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ScenarioProbabilities { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ScenarioProbabilities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
@@ -1323,32 +1323,32 @@
         }
 
         // Parameter: Ρ(Λ)
-        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> GenerateScenarioProbabilities(
+        private ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> GenerateScenarioProbabilities(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>>.Builder scenarioProbabilitiesBuilder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDecimal>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>.Builder scenarioProbabilitiesBuilder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>();
 
             scenarioProbabilitiesBuilder.AddRange(
-                new List<KeyValuePair<INullableValue<int>, FhirDecimal>>()
+                new List<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>()
                 {
                     KeyValuePair.Create(
                         this.Scenarios.Where(i => i.Value.Value == 1).SingleOrDefault(),
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             (decimal)40/(decimal)100)),
 
                     KeyValuePair.Create(
                         this.Scenarios.Where(i => i.Value.Value == 2).SingleOrDefault(),
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             (decimal)30/(decimal)100)),
 
                     KeyValuePair.Create(
                         this.Scenarios.Where(i => i.Value.Value == 3).SingleOrDefault(),
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             (decimal)20/(decimal)100)),
 
                     KeyValuePair.Create(
                         this.Scenarios.Where(i => i.Value.Value == 4).SingleOrDefault(),
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             (decimal)10/(decimal)100)),
                 });
 
@@ -1934,7 +1934,7 @@
                         Tuple.Create(
                             surgeon,
                             scenario,
-                            this.ScenarioProbabilities.Where(w => w.Key == scenario).Select(w => w.Value).SingleOrDefault()));
+                            (FhirDecimal)this.ScenarioProbabilities.Where(w => w.Key == scenario).Select(w => w.Value).SingleOrDefault()));
                 }
             }
 
