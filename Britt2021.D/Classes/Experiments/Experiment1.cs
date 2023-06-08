@@ -525,7 +525,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<INullableValue<int>, FhirDecimal>> ScenarioProbabilities { get; }
@@ -1306,17 +1306,17 @@
         }
 
         // Parameter: μ(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> GenerateSurgeonScenarioMaximumNumberPatientMeans(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientMeans(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>>.Builder surgeonScenarioMaximumNumberPatientMeansBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder surgeonScenarioMaximumNumberPatientMeansBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
 
             this.SurgeonScenarioMaximumNumberPatients.ForEach(i =>
             surgeonScenarioMaximumNumberPatientMeansBuilder.Add(
                 Tuple.Create(
                     i.Item1,
                     i.Item2,
-                    (FhirDecimal)nullableValueFactory.Create<decimal>(
+                    nullableValueFactory.Create<decimal>(
                         (decimal)i.Item3.Value.Value))));
 
             return surgeonScenarioMaximumNumberPatientMeansBuilder.ToImmutableList();

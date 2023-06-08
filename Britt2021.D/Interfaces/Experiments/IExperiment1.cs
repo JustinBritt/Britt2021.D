@@ -170,7 +170,7 @@
         /// Parameter: μ(s, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientMeans { get; }
+        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <summary>
         /// Gets the scenario probabilities.
