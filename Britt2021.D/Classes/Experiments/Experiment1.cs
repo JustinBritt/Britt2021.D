@@ -501,7 +501,7 @@
         public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, PositiveInt>> SurgeonStrategicTargets { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonStrategicTargets { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, PositiveInt>> SurgeonScenarioMaximumNumberPatients { get; }
@@ -1101,17 +1101,17 @@
         }
 
         // Parameter: N(s)
-        private ImmutableList<KeyValuePair<Organization, PositiveInt>> GenerateSurgeonStrategicTargetsSameForAllSurgeons(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateSurgeonStrategicTargetsSameForAllSurgeons(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<Organization, PositiveInt>>.Builder surgeonStrategicTargetsBuilder = ImmutableList.CreateBuilder<KeyValuePair<Organization, PositiveInt>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder surgeonStrategicTargetsBuilder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
                 surgeonStrategicTargetsBuilder.Add(
                     KeyValuePair.Create(
                         surgeon,
-                        (PositiveInt)nullableValueFactory.Create<int>(
+                        nullableValueFactory.Create<int>(
                             40)));
             }
 

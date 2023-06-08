@@ -115,7 +115,7 @@
         /// Parameter: N(s)
         /// Used in: 1B
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, PositiveInt>> SurgeonStrategicTargets { get; }
+        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonStrategicTargets { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatients.
