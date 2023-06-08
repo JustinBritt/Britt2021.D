@@ -534,7 +534,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
+        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> DayAvailabilities { get; }
@@ -1440,17 +1440,17 @@
         }
 
         // Parameter: σ(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>> GenerateSurgeonScenarioMaximumNumberPatientStandardDeviations(
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientStandardDeviations(
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, FhirDecimal>>();
+            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
 
             this.SurgeonScenarioMaximumNumberPatients.ForEach(i =>
             builder.Add(
                 Tuple.Create(
                     i.Item1,
                     i.Item2,
-                    (FhirDecimal)nullableValueFactory.Create<decimal>(
+                    nullableValueFactory.Create<decimal>(
                         0m))));
 
             return builder.ToImmutableList();
