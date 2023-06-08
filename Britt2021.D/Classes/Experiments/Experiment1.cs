@@ -291,7 +291,7 @@
             // Used in: 3B, 4, 5
             int numberDaysPerWeek = 7;
 
-            this.NumberDaysPerWeek = (PositiveInt)nullableValueFactory.Create<int>(
+            this.NumberDaysPerWeek = nullableValueFactory.Create<int>(
                 numberDaysPerWeek);
 
             // SurgeonMachineRequirements
@@ -513,7 +513,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, FhirDecimal>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <inheritdoc />
-        public PositiveInt NumberDaysPerWeek { get; }
+        public INullableValue<int> NumberDaysPerWeek { get; }
 
         /// <inheritdoc />
         public Duration TimeBlockLength { get; }
