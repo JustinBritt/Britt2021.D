@@ -278,10 +278,8 @@
             // SurgeonScenarioMaximumNumberPatients
             // Parameter: n(s, Λ)
             // Used in: 1B, 2
-            this.SurgeonScenarioMaximumNumberPatients = nCalculation.Calculate(
-                this.NullableValueFactory,
-                this.WeightedAverageSurgicalDurations,
-                this.TimeBlockLength);
+            this.SurgeonScenarioMaximumNumberPatients = this.GenerateSurgeonScenarioMaximumNumberPatients(
+                nCalculation);
 
             // ServiceLevelProbabilities
             // Parameter: P(υ1)
@@ -1152,6 +1150,16 @@
             }
 
             return redBlackTree;
+        }
+
+        // Parameter: n(s, Λ)
+        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> GenerateSurgeonScenarioMaximumNumberPatients(
+            InCalculation nCalculation)
+        {
+            return nCalculation.Calculate(
+                this.NullableValueFactory,
+                this.WeightedAverageSurgicalDurations,
+                this.TimeBlockLength);
         }
 
         // Parameter: P(υ1)
