@@ -10,6 +10,21 @@
         {
         }
 
+        public IDeviceComparerFactory CreateDeviceComparerFactory()
+        {
+            IDeviceComparerFactory factory = null;
+
+            try
+            {
+                factory = new DeviceComparerFactory();
+            }
+            finally
+            {
+            }
+
+            return factory;
+        }
+
         public INullableValueintComparerFactory CreateNullableValueintComparerFactory()
         {
             INullableValueintComparerFactory factory = null;
