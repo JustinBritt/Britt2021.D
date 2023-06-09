@@ -124,7 +124,7 @@
         /// Parameter: n(s, Λ)
         /// Used in: 1B, 2
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <summary>
         /// Gets the service level probabilities.
@@ -172,7 +172,7 @@
         /// Parameter: μ(s, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <summary>
         /// Gets the scenario probabilities.
@@ -192,7 +192,7 @@
         /// Parameter: σ(s, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <summary>
         /// Gets DayAvailabilities.

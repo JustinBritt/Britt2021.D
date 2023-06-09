@@ -20,6 +20,7 @@
     using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
+    using Britt2021.D.Factories.Comparers;
 
     public sealed class Experiment1 : IExperiment1
     {
@@ -279,6 +280,8 @@
             // Parameter: n(s, Λ)
             // Used in: 1B, 2
             this.SurgeonScenarioMaximumNumberPatients = this.GenerateSurgeonScenarioMaximumNumberPatients(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 nCalculation);
 
             // ServiceLevelProbabilities
@@ -315,6 +318,8 @@
             // Parameter: μ(s, Λ)
             // Used in: 3B
             this.SurgeonScenarioMaximumNumberPatientMeans = this.GenerateSurgeonScenarioMaximumNumberPatientMeans(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // ScenarioProbabilities
@@ -328,6 +333,8 @@
             // Parameter: σ(s, Λ)
             // Used in: 3B
             this.SurgeonScenarioMaximumNumberPatientStandardDeviations = this.GenerateSurgeonScenarioMaximumNumberPatientStandardDeviations(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // DayAvailabilities
@@ -518,7 +525,7 @@
         public RedBlackTree<Organization, INullableValue<int>> SurgeonStrategicTargets { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
@@ -539,7 +546,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <inheritdoc />
         public RedBlackTree<INullableValue<int>, INullableValue<decimal>> ScenarioProbabilities { get; }
@@ -548,7 +555,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <inheritdoc />
         public RedBlackTree<FhirDateTime, INullableValue<bool>> DayAvailabilities { get; }
@@ -1153,13 +1160,39 @@
         }
 
         // Parameter: n(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> GenerateSurgeonScenarioMaximumNumberPatients(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> GenerateSurgeonScenarioMaximumNumberPatients(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             InCalculation nCalculation)
         {
-            return nCalculation.Calculate(
+            var calculation = nCalculation.Calculate(
                 this.NullableValueFactory,
                 this.WeightedAverageSurgicalDurations,
                 this.TimeBlockLength);
+
+            //
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>>(
+                organizationComparerFactory.Create());
+
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                    nullableValueintComparerFactory.Create());
+
+                foreach (INullableValue<int> scenario in this.Scenarios)
+                {
+                    innerRedBlackTree.Add(
+                        scenario,
+                        calculation.Where(w => w.Item1 == surgeon && w.Item2 == scenario).Select(w => w.Item3).SingleOrDefault());
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
+                
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: P(υ1)
@@ -1352,20 +1385,34 @@
         }
 
         // Parameter: μ(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientMeans(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientMeans(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder surgeonScenarioMaximumNumberPatientMeansBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                organizationComparerFactory.Create());
 
-            this.SurgeonScenarioMaximumNumberPatients.ForEach(i =>
-            surgeonScenarioMaximumNumberPatientMeansBuilder.Add(
-                Tuple.Create(
-                    i.Item1,
-                    i.Item2,
-                    nullableValueFactory.Create<decimal>(
-                        (decimal)i.Item3.Value.Value))));
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                    nullableValueintComparerFactory.Create());
 
-            return surgeonScenarioMaximumNumberPatientMeansBuilder.ToImmutableList();
+                foreach (INullableValue<int> scenario in this.Scenarios)
+                {
+                    innerRedBlackTree.Add(
+                        scenario,
+                        nullableValueFactory.Create<decimal>(
+                            this.SurgeonScenarioMaximumNumberPatients[surgeon][scenario].Value.Value));
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
+
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: Ρ(Λ)
@@ -1484,20 +1531,34 @@
         }
 
         // Parameter: σ(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientStandardDeviations(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonScenarioMaximumNumberPatientStandardDeviations(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                organizationComparerFactory.Create());
 
-            this.SurgeonScenarioMaximumNumberPatients.ForEach(i =>
-            builder.Add(
-                Tuple.Create(
-                    i.Item1,
-                    i.Item2,
-                    nullableValueFactory.Create<decimal>(
-                        0m))));
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                    nullableValueintComparerFactory.Create());
 
-            return builder.ToImmutableList();
+                foreach (INullableValue<int> scenario in this.Scenarios)
+                {
+                    innerRedBlackTree.Add(
+                        scenario,
+                        nullableValueFactory.Create<decimal>(
+                            0m));
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
+
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: ω(s)
@@ -1618,7 +1679,7 @@
                     int numberPatients =
                         surgeonGroupNumberBlocks
                         *
-                        this.SurgeonScenarioMaximumNumberPatients.Where(w => w.Item1 == surgeonGroup && w.Item2 == scenario).Select(w => w.Item3.Value.Value).SingleOrDefault();
+                        this.SurgeonScenarioMaximumNumberPatients[surgeonGroup][scenario].Value.Value;
 
                     surgeonGroupNumberPatientsBuilder.Add(
                         KeyValuePair.Create(
