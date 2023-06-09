@@ -348,6 +348,7 @@
             // Parameter: ω(s)
             // Used in: 1B
             this.SurgeonPenaltyWeights = this.GenerateSurgeonPenaltyWeightsSameForAllSurgeons(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 this.Surgeons,
                 2m);
@@ -554,7 +555,7 @@
         public INullableValue<int> MaximumNumberRecoveryWardBeds { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> SurgeonPenaltyWeights { get; }
+        public RedBlackTree<Organization, INullableValue<decimal>> SurgeonPenaltyWeights { get; }
 
         /// <inheritdoc />
         public ImmutableList<PositiveInt> Belien2007LengthOfStayDays { get; }
@@ -1485,23 +1486,25 @@
         }
 
         // Parameter: ω(s)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> GenerateSurgeonPenaltyWeightsSameForAllSurgeons(
+        private RedBlackTree<Organization, INullableValue<decimal>> GenerateSurgeonPenaltyWeightsSameForAllSurgeons(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             Bundle surgeons,
             decimal penaltyWeight)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<decimal>>>();
+            RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                builder.Add(
+                redBlackTree.Add(
                     KeyValuePair.Create(
                         surgeon,
                         nullableValueFactory.Create<decimal>(
                             penaltyWeight)));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: p(s, d)

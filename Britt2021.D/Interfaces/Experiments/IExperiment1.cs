@@ -213,7 +213,7 @@
         /// Parameter: ω(s)
         /// Used in: 1B
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> SurgeonPenaltyWeights { get; }
+        RedBlackTree<Organization, INullableValue<decimal>> SurgeonPenaltyWeights { get; }
 
         /// <summary>
         /// Gets the length of stay days.
