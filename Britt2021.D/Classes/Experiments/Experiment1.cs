@@ -198,6 +198,7 @@
             int numberOperatingRoomServiceLevels = 3;
 
             this.OperatingRoomServiceLevels = this.GenerateOperatingRoomServiceLevels(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 nullableValueFactory,
                 numberOperatingRoomServiceLevels);
 
@@ -488,7 +489,7 @@
         public ImmutableSortedSet<INullableValue<int>> Scenarios { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
+        public ImmutableSortedSet<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
@@ -969,7 +970,8 @@
         // OperatingRoomServiceLevels
         // Index: υ1
         // Used in: 1A, 1B
-        private ImmutableList<INullableValue<int>> GenerateOperatingRoomServiceLevels(
+        private ImmutableSortedSet<INullableValue<int>> GenerateOperatingRoomServiceLevels(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int numberOperatingRoomServiceLevels)
         {
@@ -977,7 +979,8 @@
                 .Range(1, numberOperatingRoomServiceLevels)
                 .Select(i => nullableValueFactory.Create<int>(
                     i))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Parameter: A(s, υ1)

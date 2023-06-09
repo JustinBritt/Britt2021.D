@@ -74,7 +74,7 @@
         /// Index: υ1
         /// Used in: 1A, 1B
         /// </summary>
-        ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
+        ImmutableSortedSet<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <summary>
         /// Gets SurgeonServiceLevelNumberTimeBlocks.
