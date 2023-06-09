@@ -1031,7 +1031,7 @@
             decimal cost,
             Money.Currencies currency)
         {
-            RedBlackTree<Device, Money> redBlackTree = new(
+            RedBlackTree<Device, Money> redBlackTree = new RedBlackTree<Device, Money>(
                 deviceComparerFactory.Create());
 
             foreach (Device machine in this.Machines.Entry.Where(i => i.Resource is Device).Select(w => (Device)w.Resource))
