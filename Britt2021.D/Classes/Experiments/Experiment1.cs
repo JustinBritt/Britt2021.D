@@ -210,6 +210,8 @@
             // Used in: 1A, 1B
             // 16 operating rooms, 42 day planning horizon, no weekends: 8, 12, 16
             this.SurgeonServiceLevelNumberTimeBlocks = this.GenerateSurgeonServiceLevelNumberTimeBlocks(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // MachineCosts
@@ -500,7 +502,7 @@
         public ImmutableSortedSet<INullableValue<int>> OperatingRoomServiceLevels { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Device, Money> MachineCosts { get; }
@@ -994,36 +996,54 @@
         }
 
         // Parameter: A(s, υ1)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> GenerateSurgeonServiceLevelNumberTimeBlocks(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> GenerateSurgeonServiceLevelNumberTimeBlocks(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>>.Builder surgeonServiceLevelNumberTimeBlocksBuilder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<int>>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in Surgeons.Entry.Select(x => (Organization)x.Resource))
             {
-                surgeonServiceLevelNumberTimeBlocksBuilder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            this.OperatingRoomServiceLevels[0],
-                            nullableValueFactory.Create<int>(
-                                4)));
+                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree0 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                    nullableValueintComparerFactory.Create());
 
-                surgeonServiceLevelNumberTimeBlocksBuilder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            this.OperatingRoomServiceLevels[1],
-                            nullableValueFactory.Create<int>(
-                                8)));
+                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree1 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                    nullableValueintComparerFactory.Create());
 
-                surgeonServiceLevelNumberTimeBlocksBuilder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            this.OperatingRoomServiceLevels[2],
-                            nullableValueFactory.Create<int>(
-                                12)));
+                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree2 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                    nullableValueintComparerFactory.Create());
+
+                innerRedBlackTree0.Add(
+                    this.OperatingRoomServiceLevels[0],
+                    nullableValueFactory.Create<int>(
+                                4));
+
+                innerRedBlackTree1.Add(
+                    this.OperatingRoomServiceLevels[1],
+                    nullableValueFactory.Create<int>(
+                                8));
+
+                innerRedBlackTree2.Add(
+                    this.OperatingRoomServiceLevels[2],
+                    nullableValueFactory.Create<int>(
+                                12));
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree0);
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree1);
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree2);
             }
 
-            return surgeonServiceLevelNumberTimeBlocksBuilder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Parameter: C(m)
