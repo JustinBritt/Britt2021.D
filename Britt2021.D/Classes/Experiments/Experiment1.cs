@@ -1033,21 +1033,13 @@
             RedBlackTree<Device, Money> redBlackTree = new(
                 deviceComparerFactory.Create());
 
-            var list = this.Machines
-                .Entry
-                .Where(i => i.Resource is Device)
-                .Select(i => KeyValuePair.Create(
-                    (Device)i.Resource,
-                    moneyFactory.Create(
-                        cost,
-                        currency)))
-                .ToImmutableList();
-
-            foreach (var item in list)
+            foreach (Device machine in this.Machines.Entry.Where(i => i.Resource is Device).Select(w => (Device)w.Resource))
             {
                 redBlackTree.Add(
-                    item.Key,
-                    item.Value);
+                    machine,
+                    moneyFactory.Create(
+                        cost,
+                        currency));
             }
 
             return redBlackTree;
