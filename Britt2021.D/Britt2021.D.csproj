@@ -46,9 +46,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Classes\Comparers\" />
-    <Folder Include="Interfaces\Comparers\" />
-  </ItemGroup>
 </Project>
