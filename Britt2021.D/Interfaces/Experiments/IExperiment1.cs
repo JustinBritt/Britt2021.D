@@ -12,7 +12,7 @@
         /// Gets the weekdays.
         /// Indices: d, d1, d2
         /// </summary>
-        ImmutableList<INullableValue<int>> Weekdays { get; }
+        ImmutableSortedSet<INullableValue<int>> Weekdays { get; }
 
         /// <summary>
         /// Gets the surgical specialties.

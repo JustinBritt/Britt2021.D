@@ -15,6 +15,7 @@
     using Britt2021.D.Interfaces.Calculations;
     using Britt2021.D.Interfaces.Experiments;
     using Britt2021.D.InterfacesAbstractFactories;
+    using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
 
@@ -24,6 +25,7 @@
 
         public Experiment1(
             ICalculationsAbstractFactory calculationsAbstractFactory,
+            IComparersAbstractFactory comparersAbstractFactory,
             IDependenciesAbstractFactory dependenciesAbstractFactory)
         {
             IBundleFactory bundleFactory = dependenciesAbstractFactory.CreateBundleFactory();
@@ -62,6 +64,7 @@
             int numberWeekdaysPerWeek = 5;
 
             this.Weekdays = this.GenerateWeekdays(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.NullableValueFactory,
                 numberWeekdaysPerWeek);
 
@@ -456,7 +459,7 @@
         public INullableValueFactory NullableValueFactory { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> Weekdays { get; }
+        public ImmutableSortedSet<INullableValue<int>> Weekdays { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, ImmutableList<Organization>>> SurgicalSpecialties { get; }
@@ -627,14 +630,16 @@
         private Organization SurgicalSpecialty7URO { get; }
 
         // Indices: d, d1, d2
-        private ImmutableList<INullableValue<int>> GenerateWeekdays(
+        private ImmutableSortedSet<INullableValue<int>> GenerateWeekdays(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int numberWeekdaysPerWeek)
         {
             return Enumerable
                 .Range(1, numberWeekdaysPerWeek)
                 .Select(i => nullableValueFactory.Create<int>(i))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Index: j
