@@ -90,7 +90,7 @@
         /// Parameter: C(m)
         /// Used in: 3A
         /// </summary>
-        ImmutableList<KeyValuePair<Device, Money>> MachineCosts { get; }
+        RedBlackTree<Device, Money> MachineCosts { get; }
 
         /// <summary>
         /// Gets the surgical frequencies.

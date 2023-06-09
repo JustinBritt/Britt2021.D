@@ -216,6 +216,7 @@
             // Parameter: C(m)
             // Used in: 3A
             this.MachineCosts = this.GenerateMachineCostsSameCost(
+                deviceComparerFactory: comparersAbstractFactory.CreateDeviceComparerFactory(),
                 moneyFactory: moneyFactory,
                 cost: 300,
                 currency: Money.Currencies.CAD);
@@ -498,7 +499,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonServiceLevelNumberTimeBlocks { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Device, Money>> MachineCosts { get; }
+        public RedBlackTree<Device, Money> MachineCosts { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
@@ -1023,12 +1024,16 @@
 
         // Parameter: C(m)
         // Used in: 3A
-        private ImmutableList<KeyValuePair<Device, Money>> GenerateMachineCostsSameCost(
+        private RedBlackTree<Device, Money> GenerateMachineCostsSameCost(
+            IDeviceComparerFactory deviceComparerFactory,
             IMoneyFactory moneyFactory,
             decimal cost,
             Money.Currencies currency)
         {
-            return this.Machines
+            RedBlackTree<Device, Money> redBlackTree = new(
+                deviceComparerFactory.Create());
+
+            var list = this.Machines
                 .Entry
                 .Where(i => i.Resource is Device)
                 .Select(i => KeyValuePair.Create(
@@ -1037,6 +1042,15 @@
                         cost,
                         currency)))
                 .ToImmutableList();
+
+            foreach (var item in list)
+            {
+                redBlackTree.Add(
+                    item.Key,
+                    item.Value);
+            }
+
+            return redBlackTree;
         }
 
         // Parameter: f(s, k)
