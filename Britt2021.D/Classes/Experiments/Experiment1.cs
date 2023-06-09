@@ -547,7 +547,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>> DayAvailabilities { get; }
+        public RedBlackTree<FhirDateTime, INullableValue<bool>> DayAvailabilities { get; }
 
         /// <inheritdoc />
         public INullableValue<int> MaximumNumberRecoveryWardBeds { get; }
@@ -1234,19 +1234,23 @@
         }
 
         // Parameter: ψ(t)
-        private ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>> GenerateDayAvailabilitiesAllOperatingRoomsUnavailableOnWeekends(
+        private RedBlackTree<FhirDateTime, INullableValue<bool>> GenerateDayAvailabilitiesAllOperatingRoomsUnavailableOnWeekends(
+            IFhirDateTimeComparerFactory FhirDateTimeComparerFactory,
             IFhirDateTimeFactory FhirDateTimeFactory,
             INullableValueFactory nullableValueFactory,
             DateTime endDate,
             DateTime startDate)
         {
+            RedBlackTree<FhirDateTime, INullableValue<bool>> redBlackTree = new RedBlackTree<FhirDateTime, INullableValue<bool>>(
+                FhirDateTimeComparerFactory.Create());
+
             ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<bool>>>();
 
             for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
             {
                 if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday)
                 {
-                    builder.Add(
+                    redBlackTree.Add(
                        KeyValuePair.Create(
                            FhirDateTimeFactory.Create(
                                dt),
@@ -1255,7 +1259,7 @@
                 }
                 else
                 {
-                    builder.Add(
+                    redBlackTree.Add(
                        KeyValuePair.Create(
                            FhirDateTimeFactory.Create(
                                dt),
@@ -1264,7 +1268,7 @@
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: ζ(s, m)
