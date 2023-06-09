@@ -32,7 +32,7 @@
         /// Parameter and Index: l, L(s)
         /// Used in: 4, 5
         /// </summary>
-        ImmutableList<INullableValue<int>> LengthOfStayDays { get; }
+        ImmutableSortedSet<INullableValue<int>> LengthOfStayDays { get; }
 
         /// <summary>
         /// Gets the machines.

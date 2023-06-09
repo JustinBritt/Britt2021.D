@@ -84,6 +84,7 @@
             int maximumLengthOfStay = 5;
 
             this.LengthOfStayDays = this.GenerateLengthOfStayDays(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 nullableValueFactory,
                 maximumLengthOfStay);
 
@@ -471,7 +472,7 @@
         public ImmutableSortedSet<INullableValue<int>> Clusters { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> LengthOfStayDays { get; }
+        public ImmutableSortedSet<INullableValue<int>> LengthOfStayDays { get; }
 
         /// <inheritdoc />
         public Bundle Machines { get; }
@@ -871,14 +872,16 @@
         }
 
         // Index: l, where L(s) is the maximum for surgical team s
-        private ImmutableList<INullableValue<int>> GenerateLengthOfStayDays(
+        private ImmutableSortedSet<INullableValue<int>> GenerateLengthOfStayDays(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int maximumLengthOfStay)
         {
             return Enumerable
                 .Range(0, maximumLengthOfStay + 1)
                 .Select(i => nullableValueFactory.Create<int>(i))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Index: M
