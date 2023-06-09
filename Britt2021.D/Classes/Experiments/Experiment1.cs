@@ -320,6 +320,7 @@
             // Parameter: Ρ(Λ)
             // Used in: 1B, 2, 4, 5
             this.ScenarioProbabilities = this.GenerateScenarioProbabilities(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 nullableValueFactory);
 
             // SurgeonScenarioMaximumNumberPatientStandardDeviations
@@ -540,7 +541,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ScenarioProbabilities { get; }
+        public RedBlackTree<INullableValue<int>, INullableValue<decimal>> ScenarioProbabilities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
@@ -1352,36 +1353,34 @@
         }
 
         // Parameter: Ρ(Λ)
-        private ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> GenerateScenarioProbabilities(
+        private RedBlackTree<INullableValue<int>, INullableValue<decimal>> GenerateScenarioProbabilities(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>.Builder scenarioProbabilitiesBuilder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<INullableValue<int>, INullableValue<decimal>> redBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                nullableValueintComparerFactory.Create());
 
-            scenarioProbabilitiesBuilder.AddRange(
-                new List<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>()
-                {
-                    KeyValuePair.Create(
-                        this.Scenarios.Where(i => i.Value.Value == 1).SingleOrDefault(),
-                        nullableValueFactory.Create<decimal>(
-                            (decimal)40/(decimal)100)),
+            redBlackTree.Add(
+                this.Scenarios.Where(i => i.Value.Value == 1).SingleOrDefault(),
+                nullableValueFactory.Create<decimal>(
+                    (decimal)40 / (decimal)100));
 
-                    KeyValuePair.Create(
-                        this.Scenarios.Where(i => i.Value.Value == 2).SingleOrDefault(),
-                        nullableValueFactory.Create<decimal>(
-                            (decimal)30/(decimal)100)),
+            redBlackTree.Add(
+                this.Scenarios.Where(i => i.Value.Value == 2).SingleOrDefault(),
+                nullableValueFactory.Create<decimal>(
+                    (decimal)30 / (decimal)100));
 
-                    KeyValuePair.Create(
-                        this.Scenarios.Where(i => i.Value.Value == 3).SingleOrDefault(),
-                        nullableValueFactory.Create<decimal>(
-                            (decimal)20/(decimal)100)),
+            redBlackTree.Add(
+                this.Scenarios.Where(i => i.Value.Value == 3).SingleOrDefault(),
+                nullableValueFactory.Create<decimal>(
+                    (decimal)20 / (decimal)100));
 
-                    KeyValuePair.Create(
-                        this.Scenarios.Where(i => i.Value.Value == 4).SingleOrDefault(),
-                        nullableValueFactory.Create<decimal>(
-                            (decimal)10/(decimal)100)),
-                });
+            redBlackTree.Add(
+                this.Scenarios.Where(i => i.Value.Value == 4).SingleOrDefault(),
+                nullableValueFactory.Create<decimal>(
+                    (decimal)10 / (decimal)100));
 
-            return scenarioProbabilitiesBuilder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: ρ(s, k, Λ)

@@ -179,7 +179,7 @@
         /// Parameter: Ρ(Λ)
         /// Used in: 1B, 2, 4, 5
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ScenarioProbabilities { get; }
+        RedBlackTree<INullableValue<int>, INullableValue<decimal>> ScenarioProbabilities { get; }
 
         /// <summary>
         /// Gets the surgical durations.
