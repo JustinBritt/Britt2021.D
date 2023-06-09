@@ -25,7 +25,7 @@
         /// Gets the clusters.
         /// Index: k
         /// </summary>
-        ImmutableList<INullableValue<int>> Clusters { get; }
+        ImmutableSortedSet<INullableValue<int>> Clusters { get; }
 
         /// <summary>
         /// Gets the length of stay days.

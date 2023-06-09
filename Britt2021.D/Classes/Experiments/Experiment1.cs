@@ -74,6 +74,7 @@
             int numberClusters = 8;
 
             this.Clusters = this.GenerateClusters(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.NullableValueFactory,
                 numberClusters);
 
@@ -465,7 +466,7 @@
         public ImmutableList<Tuple<Organization, ImmutableList<Organization>>> SurgicalSpecialties { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> Clusters { get; }
+        public ImmutableSortedSet<INullableValue<int>> Clusters { get; }
 
         /// <inheritdoc />
         public ImmutableList<INullableValue<int>> LengthOfStayDays { get; }
@@ -855,14 +856,16 @@
         }
 
         // Index: k
-        private ImmutableList<INullableValue<int>> GenerateClusters(
+        private ImmutableSortedSet<INullableValue<int>> GenerateClusters(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int numberClusters)
         {
             return Enumerable
                 .Range(1, numberClusters)
                 .Select(i => nullableValueFactory.Create<int>(i))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Index: l, where L(s) is the maximum for surgical team s
@@ -1027,7 +1030,7 @@
 
         // Parameter: f(s, k)
         private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
-            ImmutableList<INullableValue<int>> clusters,
+            ImmutableSortedSet<INullableValue<int>> clusters,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
@@ -1366,7 +1369,7 @@
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
             IρCalculation ρCalculation,
-            ImmutableList<INullableValue<int>> clusters,
+            ImmutableSortedSet<INullableValue<int>> clusters,
             ImmutableList<INullableValue<int>> scenarios,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
