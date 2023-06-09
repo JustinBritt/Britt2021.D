@@ -67,7 +67,7 @@
         /// Index: Λ
         /// Used in: 1B, 2, 4, 5
         /// </summary>
-        ImmutableList<INullableValue<int>> Scenarios { get; }
+        ImmutableSortedSet<INullableValue<int>> Scenarios { get; }
 
         /// <summary>
         /// Gets the operating room service levels

@@ -188,6 +188,7 @@
             int numberScenarios = 4;
 
             this.Scenarios = this.GenerateScenarios(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 nullableValueFactory,
                 numberScenarios);
 
@@ -484,7 +485,7 @@
         public ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> PlanningHorizon { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> Scenarios { get; }
+        public ImmutableSortedSet<INullableValue<int>> Scenarios { get; }
 
         /// <inheritdoc />
         public ImmutableList<INullableValue<int>> OperatingRoomServiceLevels { get; }
@@ -953,14 +954,16 @@
         }
 
         // Index: Λ
-        private ImmutableList<INullableValue<int>> GenerateScenarios(
+        private ImmutableSortedSet<INullableValue<int>> GenerateScenarios(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int numberScenarios)
         {
             return Enumerable
                 .Range(1, numberScenarios)
                 .Select(i => nullableValueFactory.Create<int>(i))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // OperatingRoomServiceLevels
@@ -1370,7 +1373,7 @@
             ILogNormalFactory logNormalFactory,
             IρCalculation ρCalculation,
             ImmutableSortedSet<INullableValue<int>> clusters,
-            ImmutableList<INullableValue<int>> scenarios,
+            ImmutableSortedSet<INullableValue<int>> scenarios,
             Bundle surgeons,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {

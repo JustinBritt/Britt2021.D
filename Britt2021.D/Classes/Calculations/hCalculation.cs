@@ -23,7 +23,7 @@
             IDurationFactory durationFactory,
             ImmutableSortedSet<INullableValue<int>> clusters,
             Bundle surgeons,
-            ImmutableList<INullableValue<int>> scenarios,
+            ImmutableSortedSet<INullableValue<int>> scenarios,
             ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> f,
             ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> θ,
             ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> ρ)

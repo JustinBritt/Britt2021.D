@@ -26,7 +26,7 @@
             ILogNormalFactory logNormalFactory,
             INullableValue<int> cluster,
             double µ,
-            ImmutableList<INullableValue<int>> scenarios,
+            ImmutableSortedSet<INullableValue<int>> scenarios,
             double σ,
             Organization surgeon)
         {
