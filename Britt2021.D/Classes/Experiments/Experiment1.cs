@@ -11,6 +11,8 @@
 
     using MathNet.Numerics.Distributions;
 
+    using NGenerics.DataStructures.Trees;
+
     using Britt2021.D.Extensions.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.Interfaces.Calculations;
     using Britt2021.D.Interfaces.Experiments;
