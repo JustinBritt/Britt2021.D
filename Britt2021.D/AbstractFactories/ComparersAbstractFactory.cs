@@ -25,6 +25,21 @@
             return factory;
         }
 
+        public IFhirDateTimeComparerFactory CreateFhirDateTimeComparerFactory()
+        {
+            IFhirDateTimeComparerFactory factory = null;
+
+            try
+            {
+                factory = new FhirDateTimeComparerFactory();
+            }
+            finally
+            {
+            }
+
+            return factory;
+        }
+
         public INullableValueintComparerFactory CreateNullableValueintComparerFactory()
         {
             INullableValueintComparerFactory factory = null;
