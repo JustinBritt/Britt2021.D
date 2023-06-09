@@ -1006,41 +1006,27 @@
 
             foreach (Organization surgeon in Surgeons.Entry.Select(x => (Organization)x.Resource))
             {
-                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree0 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
                     nullableValueintComparerFactory.Create());
 
-                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree1 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
-                    nullableValueintComparerFactory.Create());
-
-                RedBlackTree<INullableValue<int>, INullableValue<int>> innerRedBlackTree2 = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
-                    nullableValueintComparerFactory.Create());
-
-                innerRedBlackTree0.Add(
+                innerRedBlackTree.Add(
                     this.OperatingRoomServiceLevels[0],
                     nullableValueFactory.Create<int>(
-                                4));
+                        4));
 
-                innerRedBlackTree1.Add(
+                innerRedBlackTree.Add(
                     this.OperatingRoomServiceLevels[1],
                     nullableValueFactory.Create<int>(
-                                8));
+                        8));
 
-                innerRedBlackTree2.Add(
+                innerRedBlackTree.Add(
                     this.OperatingRoomServiceLevels[2],
                     nullableValueFactory.Create<int>(
-                                12));
+                        12));
 
                 outerRedBlackTree.Add(
                     surgeon,
-                    innerRedBlackTree0);
-
-                outerRedBlackTree.Add(
-                    surgeon,
-                    innerRedBlackTree1);
-
-                outerRedBlackTree.Add(
-                    surgeon,
-                    innerRedBlackTree2);
+                    innerRedBlackTree);
             }
 
             return outerRedBlackTree;
