@@ -332,6 +332,7 @@
             // Parameter: ψ(t)
             // Used in: 1A, 1B, 3A, 3B
             this.DayAvailabilities = this.GenerateDayAvailabilitiesAllOperatingRoomsUnavailableOnWeekends(
+                comparersAbstractFactory.CreateFhirDateTimeComparerFactory(),
                 this.FhirDateTimeFactory,
                 this.NullableValueFactory,
                 endDate,
@@ -1243,8 +1244,6 @@
         {
             RedBlackTree<FhirDateTime, INullableValue<bool>> redBlackTree = new RedBlackTree<FhirDateTime, INullableValue<bool>>(
                 FhirDateTimeComparerFactory.Create());
-
-            ImmutableList<KeyValuePair<FhirDateTime, INullableValue<bool>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<bool>>>();
 
             for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
             {
