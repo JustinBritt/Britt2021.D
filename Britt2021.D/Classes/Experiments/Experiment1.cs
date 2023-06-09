@@ -264,6 +264,7 @@
             // Parameter: N(s)
             // Used in: 1B
             this.SurgeonStrategicTargets = this.GenerateSurgeonStrategicTargetsSameForAllSurgeons(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // TimeBlockLength
@@ -514,7 +515,7 @@
         public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonStrategicTargets { get; }
+        public RedBlackTree<Organization, INullableValue<int>> SurgeonStrategicTargets { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
@@ -1129,21 +1130,22 @@
         }
 
         // Parameter: N(s)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateSurgeonStrategicTargetsSameForAllSurgeons(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateSurgeonStrategicTargetsSameForAllSurgeons(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder surgeonStrategicTargetsBuilder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                surgeonStrategicTargetsBuilder.Add(
-                    KeyValuePair.Create(
-                        surgeon,
-                        nullableValueFactory.Create<int>(
-                            40)));
+                redBlackTree.Add(
+                    surgeon,
+                    nullableValueFactory.Create<int>(
+                        40));
             }
 
-            return surgeonStrategicTargetsBuilder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: P(υ1)
