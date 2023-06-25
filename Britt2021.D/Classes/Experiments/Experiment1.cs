@@ -20,7 +20,6 @@
     using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
-    using Britt2021.D.Factories.Comparers;
 
     public sealed class Experiment1 : IExperiment1
     {
@@ -618,7 +617,7 @@
         public ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardα { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> Ma2013Wardα { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardβ { get; }
@@ -2234,18 +2233,18 @@
         }
 
         // Ma2013: α(w)
-        private ImmutableList<KeyValuePair<Organization, FhirDecimal>> GenerateMa2013Wardα(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> GenerateMa2013Wardα(
             INullableValueFactory nullableValueFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, FhirDecimal>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<decimal>>>();
 
             foreach (Organization item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item1))
             {
                 builder.Add(
                     KeyValuePair.Create(
                         item,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
+                        nullableValueFactory.Create<decimal>(
                             0.333m)));
             }
             
