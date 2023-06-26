@@ -340,7 +340,7 @@
 
         INullableValue<decimal> GetBelien2007MeanWeightSMIP1();
 
-        FhirDecimal GetBelien2007VarianceWeightSMIP1();
+        INullableValue<decimal> GetBelien2007VarianceWeightSMIP1();
 
         // Parameter: p(s, d)
         ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
