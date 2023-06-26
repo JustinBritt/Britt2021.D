@@ -264,7 +264,7 @@
         /// Belien2007: wMean
         /// Used in: SMIP2, MIP2
         /// </summary>
-        FhirDecimal Belien2007MeanWeight { get; }
+        INullableValue<decimal> Belien2007MeanWeight { get; }
 
         /// <summary>
         /// Gets the variance weight.

@@ -401,7 +401,7 @@
 
             // Belien2007: wMean
             // Used in: SMIP2, MIP2
-            this.Belien2007MeanWeight = (FhirDecimal)nullableValueFactory.Create<decimal>(
+            this.Belien2007MeanWeight = nullableValueFactory.Create<decimal>(
                 0.25m);
 
             // Belien2007: wVariance
@@ -591,7 +591,7 @@
         public ImmutableList<KeyValuePair<Organization, PositiveInt>> Belien2007SurgeonNumberStates { get; }
 
         /// <inheritdoc />
-        public FhirDecimal Belien2007MeanWeight { get; }
+        public INullableValue<decimal> Belien2007MeanWeight { get; }
 
         /// <inheritdoc />
         public FhirDecimal Belien2007VarianceWeight { get; }
