@@ -457,6 +457,7 @@
 
             // Ma2013: P(w)
             this.Ma2013WardSubsetPatientGroups = this.GenerateMa2013WardSubsetPatientGroups(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
@@ -633,7 +634,7 @@
         public RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
+        public RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
@@ -2262,27 +2263,26 @@
         }
 
         // Ma2013: P(w)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013WardSubsetPatientGroups(
+        private RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> GenerateMa2013WardSubsetPatientGroups(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             IOrganizationComparerFactory organizationComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> redBlackTree = new RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>>(
+                organizationComparerFactory.Create());
 
             foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
             {
                 foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in wardSurgeonGroupPatientGroups.Item2)
                 {
-                    foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
-                    {
-                        builder.Add(
-                        KeyValuePair.Create(
-                            wardSurgeonGroupPatientGroups.Item1,
-                            patientGroup));
-                    }
+                    redBlackTree.Add(
+                        surgeonGroupPatientGroups.Item1,
+                        surgeonGroupPatientGroups.Item2.ToImmutableSortedSet(
+                            nullableValueintComparerFactory.Create()));
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: α(w)

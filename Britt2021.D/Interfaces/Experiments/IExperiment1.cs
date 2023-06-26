@@ -318,7 +318,7 @@
         /// Gets WardSubsetPatientGroups.
         /// Ma2013: P(w)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
+        RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <summary>
         /// Gets Wardα.
