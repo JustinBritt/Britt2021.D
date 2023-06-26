@@ -277,7 +277,7 @@
         /// Gets the active days.
         /// Ma2013: a
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays { get; }
+        RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays { get; }
 
         /// <summary>
         /// Gets the block types.

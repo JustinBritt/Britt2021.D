@@ -416,6 +416,7 @@
 
             // Ma2013: a
             this.Ma2013ActiveDays = this.GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.PlanningHorizon);
 
             // Ma2013: k
@@ -602,7 +603,7 @@
         public INullableValue<decimal> Belien2007VarianceWeight { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays { get; }
+        public RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays { get; }
 
         /// <inheritdoc />
         public ImmutableList<PositiveInt> Ma2013BlockTypes { get; }
@@ -2085,10 +2086,12 @@
         }
 
         // Ma2013: a
-        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
+        private RedBlackTree<INullableValue<int>, FhirDateTime> GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> planningHorizon)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDateTime>>();
+            RedBlackTree<INullableValue<int>, FhirDateTime> redBlackTree = new RedBlackTree<INullableValue<int>, FhirDateTime>(
+                nullableValueintComparerFactory.Create());
 
             foreach (KeyValuePair<INullableValue<int>, FhirDateTime> item in planningHorizon)
             {
@@ -2096,12 +2099,13 @@
 
                 if (item.Value.ToDateTimeOffset(timeZone).UtcDateTime.DayOfWeek != DayOfWeek.Saturday && item.Value.ToDateTimeOffset(timeZone).UtcDateTime.DayOfWeek != DayOfWeek.Sunday)
                 {
-                    builder.Add(
-                        item);
+                    redBlackTree.Add(
+                        item.Key,
+                        item.Value);
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: k
@@ -2184,7 +2188,7 @@
 
         // Ma2013: ORday(a, r)
         private ImmutableList<Tuple<FhirDateTime, Location, Duration>> GenerateMa2013DayOperatingRoomOperatingCapacities(
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays,
+            RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays,
             Bundle operatingRooms,
             Duration timeBlockLength)
         {
