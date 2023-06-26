@@ -62,7 +62,7 @@
         /// Index: t
         /// Used in: All problems
         /// </summary>
-        ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> PlanningHorizon { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> PlanningHorizon { get; }
 
         /// <summary>
         /// Gets the scenarios.
@@ -277,7 +277,7 @@
         /// Gets the active days.
         /// Ma2013: a
         /// </summary>
-        ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> Ma2013ActiveDays { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays { get; }
 
         /// <summary>
         /// Gets the block types.

@@ -506,7 +506,7 @@
         public Bundle Surgeons { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> PlanningHorizon { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> PlanningHorizon { get; }
 
         /// <inheritdoc />
         public ImmutableSortedSet<INullableValue<int>> Scenarios { get; }
@@ -602,7 +602,7 @@
         public INullableValue<decimal> Belien2007VarianceWeight { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> Ma2013ActiveDays { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays { get; }
 
         /// <inheritdoc />
         public ImmutableList<PositiveInt> Ma2013BlockTypes { get; }
@@ -958,19 +958,19 @@
         }
 
         // Index: t
-        private ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> GeneratePlanningHorizon(
+        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> GeneratePlanningHorizon(
             IFhirDateTimeFactory FhirDateTimeFactory,
             INullableValueFactory nullableValueFactory,
             DateTime endDate,
             DateTime startDate)
         {
-            ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, FhirDateTime>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDateTime>>();
 
             for (DateTime dt1 = startDate; dt1 <= endDate; dt1 = dt1.AddDays(1))
             {
                 builder.Add(
                     KeyValuePair.Create(
-                        (PositiveInt)nullableValueFactory.Create<int>(
+                        nullableValueFactory.Create<int>(
                             (dt1 - startDate).Days + 1),
                         FhirDateTimeFactory.Create(
                             dt1.Date)));
@@ -2085,12 +2085,12 @@
         }
 
         // Ma2013: a
-        private ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
-            ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> planningHorizon)
+        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
+            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> planningHorizon)
         {
-            ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, FhirDateTime>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDateTime>>();
 
-            foreach (KeyValuePair<PositiveInt, FhirDateTime> item in planningHorizon)
+            foreach (KeyValuePair<INullableValue<int>, FhirDateTime> item in planningHorizon)
             {
                 TimeSpan timeZone = TimeSpan.Zero;
 
@@ -2184,7 +2184,7 @@
 
         // Ma2013: ORday(a, r)
         private ImmutableList<Tuple<FhirDateTime, Location, Duration>> GenerateMa2013DayOperatingRoomOperatingCapacities(
-            ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> Ma2013ActiveDays,
+            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> Ma2013ActiveDays,
             Bundle operatingRooms,
             Duration timeBlockLength)
         {
