@@ -433,6 +433,7 @@
 
             // Ma2013: p
             this.Ma2013PatientGroups = this.GenerateMa2013PatientGroups(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
             // Ma2013: Length(k)
@@ -615,7 +616,7 @@
         public ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> Ma2013PatientGroups { get; }
+        public ImmutableSortedSet<INullableValue<int>> Ma2013PatientGroups { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
@@ -2175,13 +2176,15 @@
         }
 
         // Ma2013: p
-        private ImmutableList<INullableValue<int>> GenerateMa2013PatientGroups(
+        private ImmutableSortedSet<INullableValue<int>> GenerateMa2013PatientGroups(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {            
             return Ma2013WardSurgeonGroupPatientGroups
                 .Select(a => a.Item2)
                 .SelectMany(b => b.SelectMany(c => c.Item2))
-                .ToImmutableList();
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Ma2013: Length(k)

@@ -294,7 +294,7 @@
         /// Gets the patient groups.
         /// Ma2013: p
         /// </summary>
-        ImmutableList<INullableValue<int>> Ma2013PatientGroups { get; }
+        ImmutableSortedSet<INullableValue<int>> Ma2013PatientGroups { get; }
 
         /// <summary>
         /// Gets BlockTypeTimeBlockLengths. 
