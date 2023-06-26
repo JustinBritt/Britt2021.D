@@ -420,7 +420,8 @@
                 this.PlanningHorizon);
 
             // Ma2013: k
-            this.Ma2013BlockTypes = this.GenerateMa2013BlockTypesOnlyOneBlockType();
+            this.Ma2013BlockTypes = this.GenerateMa2013BlockTypesOnlyOneBlockType(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory());
 
             // Ma2013: WardSurgeonGroupPatientGroups
             this.Ma2013WardSurgeonGroupPatientGroups = this.GenerateMa2013WardSurgeonGroupPatientGroups(
@@ -606,7 +607,7 @@
         public RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays { get; }
 
         /// <inheritdoc />
-        public ImmutableList<INullableValue<int>> Ma2013BlockTypes { get; }
+        public ImmutableSortedSet<INullableValue<int>> Ma2013BlockTypes { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
@@ -2109,7 +2110,8 @@
         }
 
         // Ma2013: k
-        private ImmutableList<INullableValue<int>> GenerateMa2013BlockTypesOnlyOneBlockType()
+        private ImmutableSortedSet<INullableValue<int>> GenerateMa2013BlockTypesOnlyOneBlockType(
+            INullableValueintComparerFactory nullableValueintComparerFactory)
         {
             ImmutableList<INullableValue<int>>.Builder builder = ImmutableList.CreateBuilder<INullableValue<int>>();
 
@@ -2117,7 +2119,8 @@
                 this.NullableValueFactory.Create<int>(
                     1));
 
-            return builder.ToImmutableList();
+            return builder.ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Ma2013: WardSurgeonGroupPatientGroups
@@ -2173,7 +2176,7 @@
 
         // Ma2013: Length(k)
         private ImmutableList<KeyValuePair<INullableValue<int>, Duration>> GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
-            ImmutableList<INullableValue<int>> Ma2013BlockTypes,
+            ImmutableSortedSet<INullableValue<int>> Ma2013BlockTypes,
             Duration timeBlockLength)
         {
             ImmutableList<KeyValuePair<INullableValue<int>, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, Duration>>();

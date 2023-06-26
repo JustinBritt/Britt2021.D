@@ -283,7 +283,7 @@
         /// Gets the block types.
         /// Ma2013: k
         /// </summary>
-        ImmutableList<INullableValue<int>> Ma2013BlockTypes { get; }
+        ImmutableSortedSet<INullableValue<int>> Ma2013BlockTypes { get; }
 
         /// <summary>
         /// Gets WardSurgeonGroupPatientGroups.
