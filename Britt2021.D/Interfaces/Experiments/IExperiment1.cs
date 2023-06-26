@@ -231,7 +231,7 @@
         /// Gets DayNumberTimeBlocks.
         /// Belien2007: b(i)
         /// </summary>
-        ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> Belien2007DayNumberTimeBlocks { get; }
+        RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayNumberTimeBlocks { get; }
 
         /// <summary>
         /// Gets DayBedCapacities.

@@ -377,6 +377,7 @@
 
             // Belien2007: b(i)
             this.Belien2007DayNumberTimeBlocks = this.GenerateBelien2007DayNumberTimeBlocks(
+                comparersAbstractFactory.CreateFhirDateTimeComparerFactory(),
                 this.NullableValueFactory,
                 numberOperatingRooms);
 
@@ -577,7 +578,7 @@
         public RedBlackTree<FhirDateTime, INullableValue<bool>> Belien2007ActivePeriods { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> Belien2007DayNumberTimeBlocks { get; }
+        public RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayNumberTimeBlocks { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>> Belien2007DayBedCapacities { get; }
@@ -1977,22 +1978,25 @@
 
         // Belien2007: b(i)
         // Assumes that each operating room has one time block per active day
-        private ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> GenerateBelien2007DayNumberTimeBlocks(
+        private RedBlackTree<FhirDateTime, INullableValue<int>> GenerateBelien2007DayNumberTimeBlocks(
+            IFhirDateTimeComparerFactory FhirDateTimeComparerFactory,
             INullableValueFactory nullableValueFactory,
             int numberOperatingRooms)
         {
+            RedBlackTree<FhirDateTime, INullableValue<int>> redBlackTree = new RedBlackTree<FhirDateTime, INullableValue<int>>(
+                FhirDateTimeComparerFactory.Create());
+
             ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<int>>>();
 
             foreach (FhirDateTime day in this.Belien2007ActivePeriods.Where(i => i.Value.Value.Value).Select(i => i.Key))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        day,
-                        nullableValueFactory.Create<int>(
-                            numberOperatingRooms)));
+                redBlackTree.Add(
+                    day,
+                    nullableValueFactory.Create<int>(
+                        numberOperatingRooms));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Belien2007: c(i)
