@@ -581,7 +581,7 @@
         public RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayNumberTimeBlocks { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>> Belien2007DayBedCapacities { get; }
+        public ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> Belien2007DayBedCapacities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
@@ -2001,17 +2001,17 @@
 
         // Belien2007: c(i)
         // Assumes c(i) = MaximumNumberRecoveryWardBeds for each day i
-        private ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>> GenerateBelien2007DayBedCapacities(
+        private ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> GenerateBelien2007DayBedCapacities(
             Bundle surgeons)
         {
-            ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, PositiveInt>>();
+            ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<int>>>();
 
             foreach (FhirDateTime day in this.PlanningHorizon.Select(i => i.Value))
             {
                 builder.Add(
                     KeyValuePair.Create(
                         day,
-                        (PositiveInt)this.MaximumNumberRecoveryWardBeds));
+                        this.MaximumNumberRecoveryWardBeds));
             }
 
             return builder.ToImmutableList();

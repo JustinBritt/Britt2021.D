@@ -237,7 +237,7 @@
         /// Gets DayBedCapacities.
         /// Belien2007: c(i)
         /// </summary>
-        ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>> Belien2007DayBedCapacities { get; }
+        ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> Belien2007DayBedCapacities { get; }
 
         /// <summary>
         /// Gets SurgeonStateProbabilities.
