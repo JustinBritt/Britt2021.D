@@ -159,7 +159,7 @@
         /// Parameter: ζ(s, m)
         /// Used in: 3A, 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
+        RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
 
         /// <summary>
         /// Gets the surgical overheads.

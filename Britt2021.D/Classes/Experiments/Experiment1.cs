@@ -313,6 +313,8 @@
             // Parameter: ζ(s, m)
             // Used in: 3A, 3B
             this.SurgeonMachineRequirements = this.GenerateSurgeonMachineRequirements(
+                comparersAbstractFactory.CreateDeviceComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // SurgeonScenarioMaximumNumberPatientMeans
@@ -559,7 +561,7 @@
         public Duration TimeBlockLength { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
+        public RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
@@ -1341,37 +1343,43 @@
         }
 
         // Parameter: ζ(s, m)
-        private ImmutableList<Tuple<Organization, Device, INullableValue<bool>>> GenerateSurgeonMachineRequirements(
+        private RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>> GenerateSurgeonMachineRequirements(
+            IDeviceComparerFactory deviceComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<Tuple<Organization, Device, INullableValue<bool>>>.Builder surgeonMachineRequirementsBuilder = ImmutableList.CreateBuilder<Tuple<Organization, Device, INullableValue<bool>>>();
+            RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(w => w.Resource is Organization).Select(w => (Organization)w.Resource))
             {
+                RedBlackTree<Device, INullableValue<bool>> innerRedBlackTree = new RedBlackTree<Device, INullableValue<bool>>(
+                    deviceComparerFactory.Create());
+
                 foreach (Device machine in this.Machines.Entry.Where(w => w.Resource is Device).Select(w => (Device)w.Resource))
                 {
                     if (int.Parse(machine.Id) % int.Parse(surgeon.Id) == 0)
                     {
-                        surgeonMachineRequirementsBuilder.Add(
-                            Tuple.Create(
-                                surgeon,
-                                machine,
-                                nullableValueFactory.Create<bool>(
-                                    true)));
+                        innerRedBlackTree.Add(
+                            machine,
+                            nullableValueFactory.Create<bool>(
+                                true));
                     }
                     else
                     {
-                        surgeonMachineRequirementsBuilder.Add(
-                            Tuple.Create(
-                                surgeon,
-                                machine,
-                                nullableValueFactory.Create<bool>(
-                                    false)));
+                        innerRedBlackTree.Add(
+                            machine,
+                            nullableValueFactory.Create<bool>(
+                                false));
                     }
                 }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
             }
 
-            return surgeonMachineRequirementsBuilder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Parameter: θ(s, k)
