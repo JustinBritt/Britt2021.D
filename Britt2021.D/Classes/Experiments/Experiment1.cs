@@ -401,6 +401,7 @@
             // Belien2007: q(s)
             // Used in: SMIP2
             this.Belien2007SurgeonNumberStates = this.GenerateBelien2007SurgeonNumberStates(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory);
 
             // Belien2007: wMean
@@ -592,7 +593,7 @@
         public RedBlackTree<Organization, INullableValue<int>> Belien2007SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonNumberStates { get; }
+        public RedBlackTree<Organization, INullableValue<int>> Belien2007SurgeonNumberStates { get; }
 
         /// <inheritdoc />
         public INullableValue<decimal> Belien2007MeanWeight { get; }
@@ -2063,21 +2064,24 @@
         }
 
         // Assumes q(s) = NumberScenarios for each surgeon s
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateBelien2007SurgeonNumberStates(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateBelien2007SurgeonNumberStates(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
+
             ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        surgeon,
-                        this.NullableValueFactory.Create<int>(
-                            this.Scenarios.Count())));
+                redBlackTree.Add(
+                    surgeon,
+                    this.NullableValueFactory.Create<int>(
+                        this.Scenarios.Count()));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: a
