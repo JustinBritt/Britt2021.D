@@ -225,7 +225,7 @@
         /// Gets the active periods.
         /// Belien2007: A
         /// </summary>
-        ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> Belien2007ActivePeriods { get; }
+        RedBlackTree<FhirDateTime, INullableValue<bool>> Belien2007ActivePeriods { get; }
 
         /// <summary>
         /// Gets DayNumberTimeBlocks.

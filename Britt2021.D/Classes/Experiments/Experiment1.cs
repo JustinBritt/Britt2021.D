@@ -371,6 +371,7 @@
 
             // Belien2007: A
             this.Belien2007ActivePeriods = this.GenerateBelien2007ActivePeriodsAllOperatingRoomsUnavailableOnWeekends(
+                comparersAbstractFactory.CreateFhirDateTimeComparerFactory(),
                 endDate,
                 startDate);
 
@@ -573,7 +574,7 @@
         public ImmutableSortedSet<INullableValue<int>> Belien2007LengthOfStayDays { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> Belien2007ActivePeriods { get; }
+        public RedBlackTree<FhirDateTime, INullableValue<bool>> Belien2007ActivePeriods { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<FhirDateTime, PositiveInt>> Belien2007DayNumberTimeBlocks { get; }
@@ -1943,35 +1944,35 @@
         }
 
         // Belien2007: A
-        private ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> GenerateBelien2007ActivePeriodsAllOperatingRoomsUnavailableOnWeekends(
+        private RedBlackTree<FhirDateTime, INullableValue<bool>> GenerateBelien2007ActivePeriodsAllOperatingRoomsUnavailableOnWeekends(
+            IFhirDateTimeComparerFactory FhirDateTimeComparerFactory,
             DateTime endDate,
             DateTime startDate)
         {
-            ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, FhirBoolean>>();
+            RedBlackTree<FhirDateTime, INullableValue<bool>> redBlackTree = new RedBlackTree<FhirDateTime, INullableValue<bool>>(
+                FhirDateTimeComparerFactory.Create());
 
             for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
             {
                 if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday)
                 {
-                    builder.Add(
-                       KeyValuePair.Create(
-                           this.FhirDateTimeFactory.Create(
-                               dt),
-                           (FhirBoolean)this.NullableValueFactory.Create<bool>(
-                               false)));
+                    redBlackTree.Add(
+                        this.FhirDateTimeFactory.Create(
+                            dt),
+                        this.NullableValueFactory.Create<bool>(
+                            false));
                 }
                 else
                 {
-                    builder.Add(
-                       KeyValuePair.Create(
-                           this.FhirDateTimeFactory.Create(
-                               dt),
-                           (FhirBoolean)this.NullableValueFactory.Create<bool>(
-                               true)));
+                    redBlackTree.Add(
+                        this.FhirDateTimeFactory.Create(
+                            dt),
+                        this.NullableValueFactory.Create<bool>(
+                            true));
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Belien2007: b(i)
