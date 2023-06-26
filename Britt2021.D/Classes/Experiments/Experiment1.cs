@@ -162,6 +162,7 @@
             // Parameter and Index: L(s), l
             // Used in: 4, 5 (indirectly)
             this.SurgeonLengthOfStayMaximums = this.GenerateSurgeonLengthOfStayMaximumsSameForAllSurgeons(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 maximumLengthOfStay,
                 this.Surgeons);
@@ -532,7 +533,7 @@
         public ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonLengthOfStayMaximums { get; }
+        public RedBlackTree<Organization, INullableValue<int>> SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<int>> SurgeonStrategicTargets { get; }
@@ -1134,23 +1135,24 @@
         }
 
         // Parameter: L(s)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateSurgeonLengthOfStayMaximumsSameForAllSurgeons(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateSurgeonLengthOfStayMaximumsSameForAllSurgeons(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             int maximumLengthOfStay,
             Bundle surgeons)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        surgeon,
-                        nullableValueFactory.Create<int>(
-                            maximumLengthOfStay)));
+                redBlackTree.Add(
+                    surgeon,
+                    nullableValueFactory.Create<int>(
+                        maximumLengthOfStay));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: N(s)

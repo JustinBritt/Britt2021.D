@@ -110,7 +110,7 @@
         /// Parameter and Index: L(s), l
         /// Used in: 4, 5 (indirectly)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> SurgeonLengthOfStayMaximums { get; }
+        RedBlackTree<Organization, INullableValue<int>> SurgeonLengthOfStayMaximums { get; }
 
         /// <summary>
         /// Gets SurgeonStrategicTargets.
