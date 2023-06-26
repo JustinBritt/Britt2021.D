@@ -21,7 +21,7 @@
         /// Index: j
         /// Used in: 3A, 3B, 5 
         /// </summary>
-        ImmutableList<Tuple<Organization, ImmutableList<Organization>>> SurgicalSpecialties { get; }
+        RedBlackTree<Organization, ImmutableSortedSet<Organization>> SurgicalSpecialties { get; }
 
         /// <summary>
         /// Gets the clusters.
