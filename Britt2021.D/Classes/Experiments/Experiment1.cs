@@ -629,10 +629,10 @@
         public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
 
         /// <inheritdoc />
-        public RedBlackTree<Organization, INullableValue<int>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public RedBlackTree<Organization, INullableValue<int>> Ma2013WardSubsetPatientGroups { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
@@ -2230,12 +2230,11 @@
         }
 
         // Ma2013: P(s)
-        private RedBlackTree<Organization, INullableValue<int>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
             IOrganizationComparerFactory organizationComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
-                organizationComparerFactory.Create());
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
             foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
@@ -2243,23 +2242,23 @@
                 {
                     foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
-                        redBlackTree.Add(
+                        builder.Add(
+                        KeyValuePair.Create(
                             surgeonGroupPatientGroups.Item1,
-                            patientGroup);
+                            patientGroup));
                     }
                 }
             }
-            
-            return redBlackTree;
+
+            return builder.ToImmutableList();
         }
 
         // Ma2013: P(w)
-        private RedBlackTree<Organization, INullableValue<int>> GenerateMa2013WardSubsetPatientGroups(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013WardSubsetPatientGroups(
             IOrganizationComparerFactory organizationComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
-                organizationComparerFactory.Create());
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
             foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
             {
@@ -2267,14 +2266,15 @@
                 {
                     foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
-                        redBlackTree.Add(
+                        builder.Add(
+                        KeyValuePair.Create(
                             wardSurgeonGroupPatientGroups.Item1,
-                            patientGroup);
+                            patientGroup));
                     }
                 }
             }
 
-            return redBlackTree;
+            return builder.ToImmutableList();
         }
 
         // Ma2013: α(w)
