@@ -165,7 +165,7 @@
         /// Gets the surgical overheads.
         /// Parameter: θ(s, k)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientMeans.

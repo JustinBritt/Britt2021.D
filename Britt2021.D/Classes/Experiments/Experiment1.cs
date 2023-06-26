@@ -241,6 +241,8 @@
             // SurgicalOverheads
             // Parameter: θ(s, k)
             this.SurgicalOverheads = this.GenerateSurgicalOverheads(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 nullableValueFactory,
                 continuousUniformFactory,
                 lower: 1.0,
@@ -571,7 +573,7 @@
         public RedBlackTree<Organization, RedBlackTree<Device, INullableValue<bool>>> SurgeonMachineRequirements { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgicalOverheads { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientMeans { get; }
@@ -1354,12 +1356,17 @@
         }
 
         // Parameter: θ(s, k)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalOverheads(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalOverheads(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             IContinuousUniformFactory continuousUniformFactory,
             double lower,
             double upper)
         {
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                organizationComparerFactory.Create());
+
             IContinuousDistribution continuousUniform = continuousUniformFactory.Create(
                 lower: lower,
                 upper: upper);
@@ -1368,18 +1375,23 @@
 
             foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                    nullableValueintComparerFactory.Create());
+
                 foreach (INullableValue<int> cluster in this.Clusters)
                 {
-                    builder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            cluster,
-                            nullableValueFactory.Create<decimal>(
-                                (decimal)continuousUniform.Sample())));
+                    innerRedBlackTree.Add(
+                        cluster,
+                        nullableValueFactory.Create<decimal>(
+                            (decimal)continuousUniform.Sample()));
                 }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Parameter: μ(s, Λ)

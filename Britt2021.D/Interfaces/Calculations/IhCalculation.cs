@@ -17,7 +17,7 @@
             Bundle surgeons,
             ImmutableSortedSet<INullableValue<int>> scenarios,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> f,
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> θ,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> θ,
             ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> ρ);
     }
 }

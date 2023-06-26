@@ -27,7 +27,7 @@
             Bundle surgeons,
             ImmutableSortedSet<INullableValue<int>> scenarios,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> f,
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> θ,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> θ,
             ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> ρ)
         {
             return surgeons.Entry
@@ -45,9 +45,7 @@
                             .Select(j => j.Item4.Value.Value)
                             .SingleOrDefault()
                             *
-                            θ.Where(j => j.Item1 == i.Item1 && j.Item2 == k)
-                            .Select(j => j.Item3.Value.Value)
-                            .SingleOrDefault()
+                            θ[i.Item1][i.Item2].Value.Value
                             *
                             f[i.Item1][i.Item2].Value.Value)
                         .Sum())))
