@@ -442,6 +442,7 @@
 
             // Ma2013: Length(k)
             this.Ma2013BlockTypeTimeBlockLengths = this.GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.Ma2013BlockTypes,
                 this.TimeBlockLength);
 
@@ -627,7 +628,7 @@
         public ImmutableSortedSet<INullableValue<int>> Ma2013PatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
+        public RedBlackTree<INullableValue<int>, Duration> Ma2013BlockTypeTimeBlockLengths { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
@@ -2202,18 +2203,19 @@
         }
 
         // Ma2013: Length(k)
-        private ImmutableList<KeyValuePair<INullableValue<int>, Duration>> GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
+        private RedBlackTree<INullableValue<int>, Duration> GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             ImmutableSortedSet<INullableValue<int>> Ma2013BlockTypes,
             Duration timeBlockLength)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, Duration>>();
+            RedBlackTree<INullableValue<int>, Duration> redBlackTree = new RedBlackTree<INullableValue<int>, Duration>(
+                nullableValueintComparerFactory.Create());
 
-            builder.Add(
-                KeyValuePair.Create(
-                    Ma2013BlockTypes.SingleOrDefault(),
-                    timeBlockLength));
+            redBlackTree.Add(
+                Ma2013BlockTypes.SingleOrDefault(),
+                timeBlockLength);
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: ORday(a, r)

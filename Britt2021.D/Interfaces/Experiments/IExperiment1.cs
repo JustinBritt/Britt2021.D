@@ -300,7 +300,7 @@
         /// Gets BlockTypeTimeBlockLengths. 
         /// Ma2013: Length(k)
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
+        RedBlackTree<INullableValue<int>, Duration> Ma2013BlockTypeTimeBlockLengths { get; }
 
         /// <summary>
         /// Gets DayOperatingRoomOperatingCapacities.
