@@ -1641,9 +1641,9 @@
         }
 
         // Belien2007: wVariance
-        public FhirDecimal GetBelien2007VarianceWeightSMIP1()
+        public INullableValue<decimal> GetBelien2007VarianceWeightSMIP1()
         {
-            return (FhirDecimal)this.NullableValueFactory.Create<decimal>(
+            return this.NullableValueFactory.Create<decimal>(
                 0.0m);
         }
 
