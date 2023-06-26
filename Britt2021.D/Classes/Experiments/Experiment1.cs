@@ -20,7 +20,6 @@
     using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
-    using Britt2021.D.Classes.Comparers;
 
     public sealed class Experiment1 : IExperiment1
     {
@@ -250,6 +249,8 @@
             // SurgicalFrequencies
             // Parameter: f(s, k)
             this.SurgicalFrequencies = this.GenerateSurgicalFrequenciesVanHoudenhoven2007(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.Clusters,
                 this.Surgeons,
                 this.SurgicalSpecialties);
@@ -540,7 +541,7 @@
         public RedBlackTree<Device, Money> MachineCosts { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
@@ -1044,12 +1045,15 @@
         }
 
         // Parameter: f(s, k)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalFrequenciesVanHoudenhoven2007(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             ImmutableSortedSet<INullableValue<int>> clusters,
             Bundle surgeons,
             RedBlackTree<Organization, ImmutableSortedSet<Organization>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                organizationComparerFactory.Create());
 
             VanHoudenhoven2007.InterfacesAbstractFactories.IAbstractFactory abstractFactory = VanHoudenhoven2007.AbstractFactories.AbstractFactory.Create();
             VanHoudenhoven2007.InterfacesAbstractFactories.IContextsAbstractFactory contextsAbstractFactory = abstractFactory.CreateContextsAbstractFactory();
@@ -1079,6 +1083,9 @@
 
                 foreach (Organization surgeon in item.Value)
                 {
+                    RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                        nullableValueintComparerFactory.Create());
+
                     foreach (INullableValue<int> cluster in clusters)
                     {
                         VanHoudenhoven2007.Interfaces.Contexts.SurgicalFrequencies.ISurgicalFrequencyInputContext surgicalFrequencyInputContext = contextsAbstractFactory.CreateSurgicalFrequencyInputContextFactory().Create(
@@ -1091,16 +1098,18 @@
                             abstractFactory: abstractFactory,
                             surgicalFrequencyInputContext: surgicalFrequencyInputContext);
 
-                        builder.Add(
-                            Tuple.Create(
-                                surgeon,
-                                cluster,
-                                surgicalFrequencyOutputContext.Frequency));
+                        innerRedBlackTree.Add(
+                            cluster,
+                            surgicalFrequencyOutputContext.Frequency);
                     }
+
+                    outerRedBlackTree.Add(
+                        surgeon,
+                        innerRedBlackTree);
                 }
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Parameter: L(s)
@@ -1701,7 +1710,7 @@
 
                         decimal durationAsDecimal = Ma2013PatientGroupSurgeryDurations.Where(w => w.Key == patientGroup).Select(w => w.Value.Value.Value).SingleOrDefault();
 
-                        decimal frequency = this.SurgicalFrequencies.Where(w => w.Item1 == surgeonGroup && w.Item2 == cluster).Select(w => w.Item3.Value.Value).SingleOrDefault();
+                        decimal frequency = this.SurgicalFrequencies[surgeonGroup][cluster].Value.Value;
 
                         if (durationAsDecimal > 0m && durationAsDecimal <= this.TimeBlockLength.Value.Value && frequency > 0m)
                         {
@@ -1796,7 +1805,7 @@
 
                         decimal durationAsDecimal = Ma2013PatientGroupSurgeryDurations.Where(w => w.Key == patientGroup).Select(w => w.Value.Value.Value).SingleOrDefault();
 
-                        decimal frequency = this.SurgicalFrequencies.Where(w => w.Item1 == surgeonGroup && w.Item2 == cluster).Select(w => w.Item3.Value.Value).SingleOrDefault();
+                        decimal frequency = this.SurgicalFrequencies[surgeonGroup][cluster].Value.Value;
 
                         if (
                             durationAsDecimal > 0m 

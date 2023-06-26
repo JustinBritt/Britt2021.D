@@ -96,7 +96,7 @@
         /// Gets the surgical frequencies.
         /// Parameter: f(s, k)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
 
         /// <summary>
         /// Gets the weighted average surgical durations.
