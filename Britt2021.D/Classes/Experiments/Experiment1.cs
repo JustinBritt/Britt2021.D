@@ -456,6 +456,7 @@
 
             // Ma2013: P(w)
             this.Ma2013WardSubsetPatientGroups = this.GenerateMa2013WardSubsetPatientGroups(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
             // Ma2013: α(w)
@@ -631,7 +632,7 @@
         public RedBlackTree<Organization, INullableValue<int>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
+        public RedBlackTree<Organization, INullableValue<int>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
@@ -2253,10 +2254,12 @@
         }
 
         // Ma2013: P(w)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013WardSubsetPatientGroups(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateMa2013WardSubsetPatientGroups(
+            IOrganizationComparerFactory organizationComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
 
             foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
             {
@@ -2264,15 +2267,14 @@
                 {
                     foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
-                        builder.Add(
-                        KeyValuePair.Create(
+                        redBlackTree.Add(
                             wardSurgeonGroupPatientGroups.Item1,
-                            patientGroup));
+                            patientGroup);
                     }
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: α(w)
