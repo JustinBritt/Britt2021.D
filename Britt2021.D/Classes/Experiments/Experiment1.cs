@@ -606,7 +606,7 @@
         public RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> Ma2013BlockTypes { get; }
+        public ImmutableList<INullableValue<int>> Ma2013BlockTypes { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
@@ -615,7 +615,7 @@
         public ImmutableList<PositiveInt> Ma2013PatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<PositiveInt, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
+        public ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
@@ -2109,12 +2109,12 @@
         }
 
         // Ma2013: k
-        private ImmutableList<PositiveInt> GenerateMa2013BlockTypesOnlyOneBlockType()
+        private ImmutableList<INullableValue<int>> GenerateMa2013BlockTypesOnlyOneBlockType()
         {
-            ImmutableList<PositiveInt>.Builder builder = ImmutableList.CreateBuilder<PositiveInt>();
+            ImmutableList<INullableValue<int>>.Builder builder = ImmutableList.CreateBuilder<INullableValue<int>>();
 
             builder.Add(
-                (PositiveInt)this.NullableValueFactory.Create<int>(
+                this.NullableValueFactory.Create<int>(
                     1));
 
             return builder.ToImmutableList();
@@ -2172,11 +2172,11 @@
         }
 
         // Ma2013: Length(k)
-        private ImmutableList<KeyValuePair<PositiveInt, Duration>> GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
-            ImmutableList<PositiveInt> Ma2013BlockTypes,
+        private ImmutableList<KeyValuePair<INullableValue<int>, Duration>> GenerateMa2013BlockTypeTimeBlockLengthsOnlyOneBlockType(
+            ImmutableList<INullableValue<int>> Ma2013BlockTypes,
             Duration timeBlockLength)
         {
-            ImmutableList<KeyValuePair<PositiveInt, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, Duration>>();
+            ImmutableList<KeyValuePair<INullableValue<int>, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, Duration>>();
 
             builder.Add(
                 KeyValuePair.Create(

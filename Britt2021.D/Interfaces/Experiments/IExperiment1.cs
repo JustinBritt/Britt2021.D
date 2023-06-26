@@ -283,7 +283,7 @@
         /// Gets the block types.
         /// Ma2013: k
         /// </summary>
-        ImmutableList<PositiveInt> Ma2013BlockTypes { get; }
+        ImmutableList<INullableValue<int>> Ma2013BlockTypes { get; }
 
         /// <summary>
         /// Gets WardSurgeonGroupPatientGroups.
@@ -300,7 +300,7 @@
         /// Gets BlockTypeTimeBlockLengths. 
         /// Ma2013: Length(k)
         /// </summary>
-        ImmutableList<KeyValuePair<PositiveInt, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
+        ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
 
         /// <summary>
         /// Gets DayOperatingRoomOperatingCapacities.
