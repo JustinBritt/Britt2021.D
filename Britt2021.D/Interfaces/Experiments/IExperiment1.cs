@@ -306,7 +306,7 @@
         /// Gets DayOperatingRoomOperatingCapacities.
         /// Ma2013: ORday(a, r)
         /// </summary>
-        ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
+        RedBlackTree<FhirDateTime, RedBlackTree<Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
 
         /// <summary>
         /// Gets SurgeonGroupSubsetPatientGroups.

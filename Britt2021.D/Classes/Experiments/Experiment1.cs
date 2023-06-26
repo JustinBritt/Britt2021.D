@@ -448,6 +448,8 @@
 
             // Ma2013: ORday(a, r)
             this.Ma2013DayOperatingRoomOperatingCapacities = this.GenerateMa2013DayOperatingRoomOperatingCapacities(
+                comparersAbstractFactory.CreateFhirDateTimeComparerFactory(),
+                comparersAbstractFactory.CreateLocationComparerFactory(),
                 this.Ma2013ActiveDays,
                 this.OperatingRooms,
                 this.TimeBlockLength);
@@ -631,7 +633,7 @@
         public RedBlackTree<INullableValue<int>, Duration> Ma2013BlockTypeTimeBlockLengths { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
+        public RedBlackTree<FhirDateTime, RedBlackTree<Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, ImmutableSortedSet<INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
@@ -2219,26 +2221,34 @@
         }
 
         // Ma2013: ORday(a, r)
-        private ImmutableList<Tuple<FhirDateTime, Location, Duration>> GenerateMa2013DayOperatingRoomOperatingCapacities(
+        private RedBlackTree<FhirDateTime, RedBlackTree<Location, Duration>> GenerateMa2013DayOperatingRoomOperatingCapacities(
+            IFhirDateTimeComparerFactory FhirDateTimeComparerFactory,
+            ILocationComparerFactory locationComparerFactory,
             RedBlackTree<INullableValue<int>, FhirDateTime> Ma2013ActiveDays,
             Bundle operatingRooms,
             Duration timeBlockLength)
         {
-            ImmutableList<Tuple<FhirDateTime, Location, Duration>>.Builder builder = ImmutableList.CreateBuilder<Tuple<FhirDateTime, Location, Duration>>();
+            RedBlackTree<FhirDateTime, RedBlackTree<Location, Duration>> outerRedBlackTree = new RedBlackTree<FhirDateTime, RedBlackTree<Location, Duration>>(
+                FhirDateTimeComparerFactory.Create());
 
             foreach (FhirDateTime activeDay in Ma2013ActiveDays.Select(w => w.Value))
             {
+                RedBlackTree<Location, Duration> innerRedBlackTree = new RedBlackTree<Location, Duration>(
+                    locationComparerFactory.Create());
+
                 foreach (Location operatingRoom in operatingRooms.Entry.Where(w => w.Resource is Location).Select(w => (Location)w.Resource))
                 {
-                    builder.Add(
-                        Tuple.Create(
-                            activeDay,
-                            operatingRoom,
-                            timeBlockLength));
+                    innerRedBlackTree.Add(
+                        operatingRoom,
+                        timeBlockLength);
                 }
+
+                outerRedBlackTree.Add(
+                    activeDay,
+                    innerRedBlackTree);
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Ma2013: P(s)
