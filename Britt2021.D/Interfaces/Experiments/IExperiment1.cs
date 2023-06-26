@@ -219,7 +219,7 @@
         /// Gets the length of stay days.
         /// Belien2007: d, d1, d2
         /// </summary>
-        ImmutableList<PositiveInt> Belien2007LengthOfStayDays { get; }
+        ImmutableSortedSet<INullableValue<int>> Belien2007LengthOfStayDays { get; }
 
         /// <summary>
         /// Gets the active periods.

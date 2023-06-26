@@ -365,6 +365,7 @@
             
             // Belien2007: d, d1, d2
             this.Belien2007LengthOfStayDays = this.GenerateBelien2007LengthOfStayDays(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.NullableValueFactory,
                 Belien2007MaximumLengthOfStay);
 
@@ -569,7 +570,7 @@
         public RedBlackTree<Organization, INullableValue<decimal>> SurgeonPenaltyWeights { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> Belien2007LengthOfStayDays { get; }
+        public ImmutableSortedSet<INullableValue<int>> Belien2007LengthOfStayDays { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<FhirDateTime, FhirBoolean>> Belien2007ActivePeriods { get; }
@@ -1596,7 +1597,7 @@
                 builder.Add(
                     Tuple.Create(
                         item.Item1,
-                        this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == item.Item2.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
+                        (PositiveInt)this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == item.Item2.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
                         (FhirDecimal)item.Item4));
             }
 
@@ -1929,14 +1930,16 @@
 
         // Belien2007: d, d1, d2 
         // Note: Index starts at 1 instead of 0
-        private ImmutableList<PositiveInt> GenerateBelien2007LengthOfStayDays(
+        private ImmutableSortedSet<INullableValue<int>> GenerateBelien2007LengthOfStayDays(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory,
             int Belien2007MaximumLengthOfStay)
         {
             return Enumerable
                 .Range(1, Belien2007MaximumLengthOfStay)
-                .Select(i => (PositiveInt)nullableValueFactory.Create<int>(i))
-                .ToImmutableList();
+                .Select(i => nullableValueFactory.Create<int>(i))
+                .ToImmutableSortedSet(
+                nullableValueintComparerFactory.Create());
         }
 
         // Belien2007: A
