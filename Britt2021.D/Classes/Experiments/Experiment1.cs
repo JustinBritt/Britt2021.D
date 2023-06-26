@@ -452,6 +452,7 @@
 
             // Ma2013: β(w)
             this.Ma2013Wardβ = this.GenerateMa2013Wardβ(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
@@ -621,7 +622,7 @@
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardβ { get; }
+        public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardβ { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardγ { get; }
@@ -2254,22 +2255,23 @@
         }
 
         // Ma2013: β(w)
-        private ImmutableList<KeyValuePair<Organization, FhirDecimal>> GenerateMa2013Wardβ(
+        private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardβ(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, FhirDecimal>>();
+            RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item1))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        item,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
-                            0.333m)));
+                redBlackTree.Add(
+                    item,
+                    nullableValueFactory.Create<decimal>(
+                        0.333m));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: γ(w)

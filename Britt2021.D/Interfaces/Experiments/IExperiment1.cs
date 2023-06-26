@@ -330,7 +330,7 @@
         /// Gets Wardβ.
         /// Ma2013: β(w)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardβ { get; }
+        RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardβ { get; }
 
         /// <summary>
         /// Gets Wardγ.
