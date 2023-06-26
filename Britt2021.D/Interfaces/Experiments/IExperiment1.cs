@@ -62,7 +62,7 @@
         /// Index: t
         /// Used in: All problems
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> PlanningHorizon { get; }
+        RedBlackTree<INullableValue<int>, FhirDateTime> PlanningHorizon { get; }
 
         /// <summary>
         /// Gets the scenarios.

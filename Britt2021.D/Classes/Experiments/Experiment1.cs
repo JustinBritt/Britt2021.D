@@ -181,6 +181,7 @@
                 planningHorizonLength - 1);
 
             this.PlanningHorizon = this.GeneratePlanningHorizon(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.FhirDateTimeFactory,
                 this.NullableValueFactory,
                 endDate,
@@ -522,7 +523,7 @@
         public Bundle Surgeons { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> PlanningHorizon { get; }
+        public RedBlackTree<INullableValue<int>, FhirDateTime> PlanningHorizon { get; }
 
         /// <inheritdoc />
         public ImmutableSortedSet<INullableValue<int>> Scenarios { get; }
@@ -974,25 +975,26 @@
         }
 
         // Index: t
-        private ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> GeneratePlanningHorizon(
+        private RedBlackTree<INullableValue<int>, FhirDateTime> GeneratePlanningHorizon(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             IFhirDateTimeFactory FhirDateTimeFactory,
             INullableValueFactory nullableValueFactory,
             DateTime endDate,
             DateTime startDate)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, FhirDateTime>>();
+            RedBlackTree<INullableValue<int>, FhirDateTime> redBlackTree = new RedBlackTree<INullableValue<int>, FhirDateTime>(
+                nullableValueintComparerFactory.Create());
 
             for (DateTime dt1 = startDate; dt1 <= endDate; dt1 = dt1.AddDays(1))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        nullableValueFactory.Create<int>(
-                            (dt1 - startDate).Days + 1),
-                        FhirDateTimeFactory.Create(
-                            dt1.Date)));
+                redBlackTree.Add(
+                    nullableValueFactory.Create<int>(
+                        (dt1 - startDate).Days + 1),
+                    FhirDateTimeFactory.Create(
+                        dt1.Date));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Index: Λ
@@ -2117,7 +2119,7 @@
         // Ma2013: a
         private RedBlackTree<INullableValue<int>, FhirDateTime> GenerateMa2013ActiveDaysAllOperatingRoomsUnavailableOnWeekends(
             INullableValueintComparerFactory nullableValueintComparerFactory,
-            ImmutableList<KeyValuePair<INullableValue<int>, FhirDateTime>> planningHorizon)
+            RedBlackTree<INullableValue<int>, FhirDateTime> planningHorizon)
         {
             RedBlackTree<INullableValue<int>, FhirDateTime> redBlackTree = new RedBlackTree<INullableValue<int>, FhirDateTime>(
                 nullableValueintComparerFactory.Create());
