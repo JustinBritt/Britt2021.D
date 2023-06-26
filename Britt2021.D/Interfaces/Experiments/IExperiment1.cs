@@ -131,7 +131,7 @@
         /// Parameter: P(υ1)
         /// Used in: 1A
         /// </summary>
-        ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
+        RedBlackTree<INullableValue<int>, INullableValue<decimal>> ServiceLevelProbabilities { get; }
 
         /// <summary>
         /// Gets SurgeonDayScenarioLengthOfStayProbabilities.

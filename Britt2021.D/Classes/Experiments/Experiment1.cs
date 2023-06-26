@@ -288,6 +288,7 @@
             // Parameter: P(υ1)
             // Used in: 1A
             this.ServiceLevelProbabilities = this.GenerateServiceLevelProbabilities(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
                 this.NullableValueFactory);
 
             // SurgeonDayScenarioLengthOfStayProbabilities
@@ -542,7 +543,7 @@
         public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<int>>> SurgeonScenarioMaximumNumberPatients { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> ServiceLevelProbabilities { get; }
+        public RedBlackTree<INullableValue<int>, INullableValue<decimal>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
@@ -1211,30 +1212,29 @@
         }
 
         // Parameter: P(υ1)
-        private ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>> GenerateServiceLevelProbabilities(
+        private RedBlackTree<INullableValue<int>, INullableValue<decimal>> GenerateServiceLevelProbabilities(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
             INullableValueFactory nullableValueFactory)
         {
-            ImmutableList<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<INullableValue<int>, INullableValue<decimal>> redBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                nullableValueintComparerFactory.Create());
 
-            builder.Add(
-                KeyValuePair.Create(
-                    this.OperatingRoomServiceLevels[0],
-                    nullableValueFactory.Create<decimal>(
-                        0.75m)));
+            redBlackTree.Add(
+                this.OperatingRoomServiceLevels[0],
+                nullableValueFactory.Create<decimal>(
+                    0.75m));
 
-            builder.Add(
-                KeyValuePair.Create(
-                    this.OperatingRoomServiceLevels[1],
-                    nullableValueFactory.Create<decimal>(
-                        0.85m)));
+            redBlackTree.Add(
+                this.OperatingRoomServiceLevels[1],
+                nullableValueFactory.Create<decimal>(
+                    0.85m));
 
-            builder.Add(
-                KeyValuePair.Create(
-                    this.OperatingRoomServiceLevels[2],
-                    nullableValueFactory.Create<decimal>(
-                        0.95m)));
+            redBlackTree.Add(
+                this.OperatingRoomServiceLevels[2],
+                nullableValueFactory.Create<decimal>(
+                    0.95m));
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Parameter: p(s, l, Λ)
