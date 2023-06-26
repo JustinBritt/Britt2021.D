@@ -458,6 +458,7 @@
 
             // Ma2013: γ(w)
             this.Ma2013Wardγ = this.GenerateMa2013Wardγ(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 this.Ma2013WardSurgeonGroupPatientGroups);
         }
@@ -625,7 +626,7 @@
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardβ { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardγ { get; }
+        public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardγ { get; }
 
         // Surgical Specialty 1 - General / Mixed (GEN / MIX)
         private Organization SurgicalSpecialty1GEN { get; }
@@ -2275,22 +2276,23 @@
         }
 
         // Ma2013: γ(w)
-        private ImmutableList<KeyValuePair<Organization, FhirDecimal>> GenerateMa2013Wardγ(
+        private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardγ(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, FhirDecimal>>();
+            RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item1))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        item,
-                        (FhirDecimal)nullableValueFactory.Create<decimal>(
-                            0.333m)));
+                redBlackTree.Add(
+                    item,
+                    nullableValueFactory.Create<decimal>(
+                        0.333m));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
     }
 }

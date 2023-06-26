@@ -336,7 +336,7 @@
         /// Gets Wardγ.
         /// Ma2013: γ(w)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardγ { get; }
+        RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardγ { get; }
 
         FhirDecimal GetBelien2007MeanWeightSMIP1();
 
