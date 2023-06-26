@@ -312,7 +312,7 @@
         /// Gets SurgeonGroupSubsetPatientGroups.
         /// Ma2013: P(s)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
+        RedBlackTree<Organization, INullableValue<int>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <summary>
         /// Gets WardSubsetPatientGroups.

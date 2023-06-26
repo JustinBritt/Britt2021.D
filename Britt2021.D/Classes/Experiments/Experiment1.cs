@@ -451,6 +451,7 @@
 
             // Ma2013: P(s)
             this.Ma2013SurgeonGroupSubsetPatientGroups = this.GenerateMa2013SurgeonGroupSubsetPatientGroups(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
             // Ma2013: P(w)
@@ -627,7 +628,7 @@
         public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
+        public RedBlackTree<Organization, INullableValue<int>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
@@ -2228,10 +2229,12 @@
         }
 
         // Ma2013: P(s)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
+            IOrganizationComparerFactory organizationComparerFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
 
             foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
@@ -2239,15 +2242,14 @@
                 {
                     foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
-                        builder.Add(
-                        KeyValuePair.Create(
+                        redBlackTree.Add(
                             surgeonGroupPatientGroups.Item1,
-                            patientGroup));
+                            patientGroup);
                     }
                 }
             }
             
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: P(w)
