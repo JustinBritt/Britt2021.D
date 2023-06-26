@@ -587,7 +587,7 @@
         public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, PositiveInt>> Belien2007SurgeonLengthOfStayMaximums { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, PositiveInt>> Belien2007SurgeonNumberStates { get; }
@@ -2018,19 +2018,19 @@
         }
 
         // Belien2007: m(s)
-        private ImmutableList<KeyValuePair<Organization, PositiveInt>> GenerateBelien2007SurgeonLengthOfStayMaximumsSameForAllSurgeons(
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateBelien2007SurgeonLengthOfStayMaximumsSameForAllSurgeons(
             INullableValueFactory nullableValueFactory,
             int Belien2007MaximumLengthOfStay,
             Bundle surgeons)
         {
-            ImmutableList<KeyValuePair<Organization, PositiveInt>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, PositiveInt>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
             foreach (Organization surgeon in surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
                 builder.Add(
                     KeyValuePair.Create(
                         surgeon,
-                        (PositiveInt)nullableValueFactory.Create<int>(
+                        nullableValueFactory.Create<int>(
                             Belien2007MaximumLengthOfStay)));
             }
 
