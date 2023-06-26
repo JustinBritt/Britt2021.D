@@ -446,6 +446,7 @@
 
             // Ma2013: α(w)
             this.Ma2013Wardα = this.GenerateMa2013Wardα(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 this.Ma2013WardSurgeonGroupPatientGroups);
 
@@ -2234,11 +2235,12 @@
 
         // Ma2013: α(w)
         private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardα(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
             RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
-                new Britt2021.D.Classes.Comparers.OrganizationComparer());
+                organizationComparerFactory.Create());
 
             foreach (Organization item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item1))
             {
