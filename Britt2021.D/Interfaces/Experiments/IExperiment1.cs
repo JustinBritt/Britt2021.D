@@ -244,7 +244,7 @@
         /// Belien2007: h(s, k)
         /// Used in: SMIP2
         /// </summary>
-        ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> Belien2007SurgeonStateProbabilities { get; }
 
         /// <summary>
         /// Gets SurgeonLengthOfStayMaximums.

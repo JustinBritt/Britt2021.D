@@ -389,6 +389,8 @@
             // Belien2007: h(s, k)
             // Used in: SMIP2
             this.Belien2007SurgeonStateProbabilities = this.GenerateBelien2007SurgeonStateProbabilities(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.Surgeons);
 
             // Belien2007: m(s)
@@ -589,7 +591,7 @@
         public RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayBedCapacities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> Belien2007SurgeonStateProbabilities { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<int>> Belien2007SurgeonLengthOfStayMaximums { get; }
@@ -2045,24 +2047,32 @@
         }
 
         // Belien2007: h(s, k)
-        private ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GenerateBelien2007SurgeonStateProbabilities(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GenerateBelien2007SurgeonStateProbabilities(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             Bundle surgeons)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                organizationComparerFactory.Create());
 
-            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            foreach (Organization surgeon in surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                foreach (PositiveInt scenario in this.Scenarios)
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                    nullableValueintComparerFactory.Create());
+
+                foreach (INullableValue<int> scenario in this.Scenarios)
                 {
-                    builder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            scenario,
-                            (FhirDecimal)this.ScenarioProbabilities.Where(w => w.Key == scenario).Select(w => w.Value).SingleOrDefault()));
+                    innerRedBlackTree.Add(
+                        scenario,
+                        this.ScenarioProbabilities.Where(w => w.Key == scenario).Select(w => w.Value).SingleOrDefault());
                 }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Assumes q(s) = NumberScenarios for each surgeon s
