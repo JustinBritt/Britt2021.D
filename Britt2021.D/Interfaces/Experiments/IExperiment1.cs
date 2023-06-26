@@ -257,7 +257,7 @@
         /// Belien2007: q(s)
         /// Used in: SMIP2
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, PositiveInt>> Belien2007SurgeonNumberStates { get; }
+        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonNumberStates { get; }
 
         /// <summary>
         /// Gets the mean weight.
