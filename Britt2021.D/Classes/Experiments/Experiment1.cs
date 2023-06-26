@@ -617,7 +617,7 @@
         public ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> Ma2013Wardα { get; }
+        public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, FhirDecimal>> Ma2013Wardβ { get; }
@@ -2233,22 +2233,22 @@
         }
 
         // Ma2013: α(w)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>> GenerateMa2013Wardα(
+        private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardα(
             INullableValueFactory nullableValueFactory,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<decimal>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<decimal>>>();
+            RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
+                new Britt2021.D.Classes.Comparers.OrganizationComparer());
 
             foreach (Organization item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item1))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        item,
-                        nullableValueFactory.Create<decimal>(
-                            0.333m)));
+                redBlackTree.Add(
+                    item,
+                    nullableValueFactory.Create<decimal>(
+                        0.333m));
             }
             
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: β(w)
