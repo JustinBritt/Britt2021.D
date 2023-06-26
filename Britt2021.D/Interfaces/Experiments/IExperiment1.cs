@@ -271,7 +271,7 @@
         /// Belien2007: wVariance
         /// Used in: SMIP2, MIP2
         /// </summary>
-        FhirDecimal Belien2007VarianceWeight { get; }
+        INullableValue<decimal> Belien2007VarianceWeight { get; }
 
         /// <summary>
         /// Gets the active days.

@@ -406,7 +406,7 @@
 
             // Belien2007: wVariance
             // Used in: SMIP2, MIP2
-            this.Belien2007VarianceWeight = (FhirDecimal)nullableValueFactory.Create<decimal>(
+            this.Belien2007VarianceWeight = nullableValueFactory.Create<decimal>(
                 0.75m);
 
             // Ma2013: a
@@ -594,7 +594,7 @@
         public INullableValue<decimal> Belien2007MeanWeight { get; }
 
         /// <inheritdoc />
-        public FhirDecimal Belien2007VarianceWeight { get; }
+        public INullableValue<decimal> Belien2007VarianceWeight { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<PositiveInt, FhirDateTime>> Ma2013ActiveDays { get; }
