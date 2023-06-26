@@ -383,6 +383,7 @@
 
             // Belien2007: c(i)
             this.Belien2007DayBedCapacities = this.GenerateBelien2007DayBedCapacities(
+                comparersAbstractFactory.CreateFhirDateTimeComparerFactory(),
                 this.Surgeons);
 
             // Belien2007: h(s, k)
@@ -581,7 +582,7 @@
         public RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayNumberTimeBlocks { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> Belien2007DayBedCapacities { get; }
+        public RedBlackTree<FhirDateTime, INullableValue<int>> Belien2007DayBedCapacities { get; }
 
         /// <inheritdoc />
         public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
@@ -2001,20 +2002,21 @@
 
         // Belien2007: c(i)
         // Assumes c(i) = MaximumNumberRecoveryWardBeds for each day i
-        private ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>> GenerateBelien2007DayBedCapacities(
+        private RedBlackTree<FhirDateTime, INullableValue<int>> GenerateBelien2007DayBedCapacities(
+            IFhirDateTimeComparerFactory FhirDateTimeComparerFactory,
             Bundle surgeons)
         {
-            ImmutableList<KeyValuePair<FhirDateTime, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<FhirDateTime, INullableValue<int>>>();
+            RedBlackTree<FhirDateTime, INullableValue<int>> redBlackTree = new RedBlackTree<FhirDateTime, INullableValue<int>>(
+                FhirDateTimeComparerFactory.Create());
 
             foreach (FhirDateTime day in this.PlanningHorizon.Select(i => i.Value))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        day,
-                        this.MaximumNumberRecoveryWardBeds));
+                redBlackTree.Add(
+                    day,
+                    this.MaximumNumberRecoveryWardBeds);
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Belien2007: m(s)
