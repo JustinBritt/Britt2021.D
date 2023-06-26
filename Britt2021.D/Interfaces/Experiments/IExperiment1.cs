@@ -338,7 +338,7 @@
         /// </summary>
         RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardγ { get; }
 
-        FhirDecimal GetBelien2007MeanWeightSMIP1();
+        INullableValue<decimal> GetBelien2007MeanWeightSMIP1();
 
         FhirDecimal GetBelien2007VarianceWeightSMIP1();
 

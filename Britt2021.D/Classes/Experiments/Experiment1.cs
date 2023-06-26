@@ -1634,9 +1634,9 @@
         }
 
         // Belien2007: wMean
-        public FhirDecimal GetBelien2007MeanWeightSMIP1()
+        public INullableValue<decimal> GetBelien2007MeanWeightSMIP1()
         {
-            return (FhirDecimal)this.NullableValueFactory.Create<decimal>(
+            return this.NullableValueFactory.Create<decimal>(
                 1.0m);
         }
 
