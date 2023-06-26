@@ -250,7 +250,7 @@
         /// Gets SurgeonLengthOfStayMaximums.
         /// Belien2007: m(s)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonLengthOfStayMaximums { get; }
+        RedBlackTree<Organization, INullableValue<int>> Belien2007SurgeonLengthOfStayMaximums { get; }
 
         /// <summary>
         /// Gets SurgeonNumberStates.

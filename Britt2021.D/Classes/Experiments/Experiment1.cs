@@ -393,6 +393,7 @@
 
             // Belien2007: m(s)
             this.Belien2007SurgeonLengthOfStayMaximums = this.GenerateBelien2007SurgeonLengthOfStayMaximumsSameForAllSurgeons(
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.NullableValueFactory,
                 Belien2007MaximumLengthOfStay,
                 this.Surgeons);
@@ -588,7 +589,7 @@
         public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> Belien2007SurgeonStateProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonLengthOfStayMaximums { get; }
+        public RedBlackTree<Organization, INullableValue<int>> Belien2007SurgeonLengthOfStayMaximums { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Belien2007SurgeonNumberStates { get; }
@@ -2020,23 +2021,24 @@
         }
 
         // Belien2007: m(s)
-        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateBelien2007SurgeonLengthOfStayMaximumsSameForAllSurgeons(
+        private RedBlackTree<Organization, INullableValue<int>> GenerateBelien2007SurgeonLengthOfStayMaximumsSameForAllSurgeons(
+            IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
             int Belien2007MaximumLengthOfStay,
             Bundle surgeons)
         {
-            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
+            RedBlackTree<Organization, INullableValue<int>> redBlackTree = new RedBlackTree<Organization, INullableValue<int>>(
+                organizationComparerFactory.Create());
 
             foreach (Organization surgeon in surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
             {
-                builder.Add(
-                    KeyValuePair.Create(
-                        surgeon,
-                        nullableValueFactory.Create<int>(
-                            Belien2007MaximumLengthOfStay)));
+                redBlackTree.Add(
+                    surgeon,
+                    nullableValueFactory.Create<int>(
+                        Belien2007MaximumLengthOfStay));
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Belien2007: h(s, k)
