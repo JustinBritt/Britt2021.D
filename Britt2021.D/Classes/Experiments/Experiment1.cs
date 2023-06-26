@@ -612,10 +612,10 @@
         public ImmutableSortedSet<INullableValue<int>> Ma2013BlockTypes { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
+        public ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<PositiveInt> Ma2013PatientGroups { get; }
+        public ImmutableList<INullableValue<int>> Ma2013PatientGroups { get; }
 
         /// <inheritdoc />
         public ImmutableList<KeyValuePair<INullableValue<int>, Duration>> Ma2013BlockTypeTimeBlockLengths { get; }
@@ -624,10 +624,10 @@
         public ImmutableList<Tuple<FhirDateTime, Location, Duration>> Ma2013DayOperatingRoomOperatingCapacities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <inheritdoc />
-        public ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013WardSubsetPatientGroups { get; }
+        public ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<decimal>> Ma2013Wardα { get; }
@@ -2134,27 +2134,27 @@
         }
 
         // Ma2013: WardSurgeonGroupPatientGroups
-        private ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> GenerateMa2013WardSurgeonGroupPatientGroups(
+        private ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> GenerateMa2013WardSurgeonGroupPatientGroups(
             INullableValueFactory nullableValueFactory,
             int numberClusters,
             ImmutableList<Tuple<Organization, ImmutableList<Organization>>> surgicalSpecialties)
         {
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>>();
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>>();
 
             int patientGroupCount = 1;
 
             foreach (Tuple<Organization, ImmutableList<Organization>> item in surgicalSpecialties)
             {
-                ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>.Builder a = ImmutableList.CreateBuilder<Tuple<Organization, ImmutableList<PositiveInt>>>();
+                ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>.Builder a = ImmutableList.CreateBuilder<Tuple<Organization, ImmutableList<INullableValue<int>>>>();
 
                 foreach (Organization surgeon in item.Item2)
                 {
-                    ImmutableList<PositiveInt>.Builder b = ImmutableList.CreateBuilder<PositiveInt>();
+                    ImmutableList<INullableValue<int>>.Builder b = ImmutableList.CreateBuilder<INullableValue<int>>();
 
                     b.AddRange(
                         Enumerable
                         .Range(patientGroupCount, numberClusters)
-                        .Select(i => (PositiveInt)nullableValueFactory.Create<int>(i))
+                        .Select(i => nullableValueFactory.Create<int>(i))
                         .ToImmutableList());
 
                     a.Add(
@@ -2175,8 +2175,8 @@
         }
 
         // Ma2013: p
-        private ImmutableList<PositiveInt> GenerateMa2013PatientGroups(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+        private ImmutableList<INullableValue<int>> GenerateMa2013PatientGroups(
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {            
             return Ma2013WardSurgeonGroupPatientGroups
                 .Select(a => a.Item2)
@@ -2223,16 +2223,16 @@
         }
 
         // Ma2013: P(s)
-        private ImmutableList<KeyValuePair<Organization, PositiveInt>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013SurgeonGroupSubsetPatientGroups(
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, PositiveInt>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, PositiveInt>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
-            foreach (ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
+            foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> surgeonGroupPatientGroups in item)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in item)
                 {
-                    foreach (PositiveInt patientGroup in surgeonGroupPatientGroups.Item2)
+                    foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
                         builder.Add(
                         KeyValuePair.Create(
@@ -2246,16 +2246,16 @@
         }
 
         // Ma2013: P(w)
-        private ImmutableList<KeyValuePair<Organization, PositiveInt>> GenerateMa2013WardSubsetPatientGroups(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+        private ImmutableList<KeyValuePair<Organization, INullableValue<int>>> GenerateMa2013WardSubsetPatientGroups(
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
-            ImmutableList<KeyValuePair<Organization, PositiveInt>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, PositiveInt>>();
+            ImmutableList<KeyValuePair<Organization, INullableValue<int>>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<Organization, INullableValue<int>>>();
 
-            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
+            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
             {
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> surgeonGroupPatientGroups in wardSurgeonGroupPatientGroups.Item2)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in wardSurgeonGroupPatientGroups.Item2)
                 {
-                    foreach (PositiveInt patientGroup in surgeonGroupPatientGroups.Item2)
+                    foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
                         builder.Add(
                         KeyValuePair.Create(
@@ -2272,7 +2272,7 @@
         private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardα(
             IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
             RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
                 organizationComparerFactory.Create());
@@ -2292,7 +2292,7 @@
         private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardβ(
             IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
             RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
                 organizationComparerFactory.Create());
@@ -2312,7 +2312,7 @@
         private RedBlackTree<Organization, INullableValue<decimal>> GenerateMa2013Wardγ(
             IOrganizationComparerFactory organizationComparerFactory,
             INullableValueFactory nullableValueFactory,
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups)
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups)
         {
             RedBlackTree<Organization, INullableValue<decimal>> redBlackTree = new RedBlackTree<Organization, INullableValue<decimal>>(
                 organizationComparerFactory.Create());

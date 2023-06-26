@@ -288,13 +288,13 @@
         /// <summary>
         /// Gets WardSurgeonGroupPatientGroups.
         /// </summary>
-        ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
+        ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups { get; }
 
         /// <summary>
         /// Gets the patient groups.
         /// Ma2013: p
         /// </summary>
-        ImmutableList<PositiveInt> Ma2013PatientGroups { get; }
+        ImmutableList<INullableValue<int>> Ma2013PatientGroups { get; }
 
         /// <summary>
         /// Gets BlockTypeTimeBlockLengths. 
@@ -312,13 +312,13 @@
         /// Gets SurgeonGroupSubsetPatientGroups.
         /// Ma2013: P(s)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
+        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013SurgeonGroupSubsetPatientGroups { get; }
 
         /// <summary>
         /// Gets WardSubsetPatientGroups.
         /// Ma2013: P(w)
         /// </summary>
-        ImmutableList<KeyValuePair<Organization, PositiveInt>> Ma2013WardSubsetPatientGroups { get; }
+        ImmutableList<KeyValuePair<Organization, INullableValue<int>>> Ma2013WardSubsetPatientGroups { get; }
 
         /// <summary>
         /// Gets Wardα.
