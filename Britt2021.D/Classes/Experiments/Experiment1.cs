@@ -264,6 +264,8 @@
             // Parameter: h(s, Λ)
             // Used in: 2
             this.WeightedAverageSurgicalDurations = this.GenerateWeightedAverageSurgicalDurations(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 hCalculation);
 
             // SurgeonStrategicTargets
@@ -543,7 +545,7 @@
         public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgicalFrequencies { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, INullableValue<int>> SurgeonLengthOfStayMaximums { get; }
@@ -1112,7 +1114,9 @@
         }
 
         // Parameter: h(s, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> GenerateWeightedAverageSurgicalDurations(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, Duration>> GenerateWeightedAverageSurgicalDurations(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             IhCalculation hCalculation)
         {
             ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> result = hCalculation.Calculate(
@@ -1124,7 +1128,28 @@
                 this.SurgicalOverheads,
                 this.SurgicalDurations);
 
-            return result;
+            //
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, Duration>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, Duration>>(
+                organizationComparerFactory.Create());
+
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, Duration> innerRedBlackTree = new RedBlackTree<INullableValue<int>, Duration>(
+                    nullableValueintComparerFactory.Create());
+
+                foreach (INullableValue<int> scenario in this.Scenarios)
+                {
+                    innerRedBlackTree.Add(
+                        scenario,
+                        result.Where(w => w.Item1 == surgeon && w.Item2 == scenario).Select(w => w.Item3).SingleOrDefault());
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: L(s)

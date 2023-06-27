@@ -103,7 +103,7 @@
         /// Parameter: h(i, Λ)
         /// Used in: 2
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, Duration>> WeightedAverageSurgicalDurations { get; }
 
         /// <summary>
         /// Gets SurgeonLengthOfStayMaximums.
