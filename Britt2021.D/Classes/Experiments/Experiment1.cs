@@ -20,6 +20,7 @@
     using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
+    using Britt2021.D.Classes.Comparers;
 
     public sealed class Experiment1 : IExperiment1
     {
@@ -229,6 +230,8 @@
             // SurgicalDurations
             // Parameter: ρ(s, k, Λ)
             this.SurgicalDurations = this.GenerateSurgicalDurationsVanHoudenhoven2007(
+                comparersAbstractFactory.CreateNullableValueintComparerFactory(),
+                comparersAbstractFactory.CreateOrganizationComparerFactory(),
                 this.DurationFactory,
                 nullableValueFactory,
                 logNormalFactory,
@@ -582,7 +585,7 @@
         public RedBlackTree<INullableValue<int>, INullableValue<decimal>> ScenarioProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> SurgicalDurations { get; }
 
         /// <inheritdoc />
         public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> SurgeonScenarioMaximumNumberPatientStandardDeviations { get; }
@@ -1457,7 +1460,9 @@
         }
 
         // Parameter: ρ(s, k, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> GenerateSurgicalDurationsVanHoudenhoven2007(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> GenerateSurgicalDurationsVanHoudenhoven2007(
+            INullableValueintComparerFactory nullableValueintComparerFactory,
+            IOrganizationComparerFactory organizationComparerFactory,
             IDurationFactory durationFactory,
             INullableValueFactory nullableValueFactory,
             ILogNormalFactory logNormalFactory,
@@ -1537,7 +1542,39 @@
                 }
             }
 
-            return builder.ToImmutableList();
+            //
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>>(
+                organizationComparerFactory.Create());
+
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> firstInnerRedBlackTree = new RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                    nullableValueintComparerFactory.Create());
+
+                foreach (INullableValue<int> cluster in this.Clusters)
+                {
+                    RedBlackTree<INullableValue<int>, INullableValue<decimal>> secondInnerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                        nullableValueintComparerFactory.Create());
+
+                    foreach (INullableValue<int> scenario in this.Scenarios)
+                    {
+                        secondInnerRedBlackTree.Add(
+                            scenario,
+                            builder.Where(w => w.Item1 == surgeon && w.Item2 == cluster && w.Item3 == scenario).Select(w => w.Item4).SingleOrDefault());
+                    }
+
+                    firstInnerRedBlackTree.Add(
+                        cluster,
+                        secondInnerRedBlackTree);
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    firstInnerRedBlackTree);
+
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: σ(s, Λ)

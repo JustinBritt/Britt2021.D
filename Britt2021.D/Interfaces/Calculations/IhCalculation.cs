@@ -18,6 +18,6 @@
             ImmutableSortedSet<INullableValue<int>> scenarios,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> f,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> θ,
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> ρ);
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> ρ);
     }
 }

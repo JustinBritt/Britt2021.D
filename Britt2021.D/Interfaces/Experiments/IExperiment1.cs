@@ -185,7 +185,7 @@
         /// Gets the surgical durations.
         /// Parameter: ρ(s, k, Λ)
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgicalDurations { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> SurgicalDurations { get; }
 
         /// <summary>
         /// Gets SurgeonScenarioMaximumNumberPatientStandardDeviations.

@@ -28,7 +28,7 @@
             ImmutableSortedSet<INullableValue<int>> scenarios,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> f,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> θ,
-            ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> ρ)
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> ρ)
         {
             return surgeons.Entry
                 .Where(x => x.Resource is Organization)
@@ -41,13 +41,11 @@
                         value: clusters
                         .Select(
                             k => // k: Cluster
-                            ρ.Where(j => j.Item1 == i.Item1 && j.Item2 == k && j.Item3 == i.Item2)
-                            .Select(j => j.Item4.Value.Value)
-                            .SingleOrDefault()
+                            ρ[i.Item1][k][i.Item2].Value.Value
                             *
-                            θ[i.Item1][i.Item2].Value.Value
+                            θ[i.Item1][k].Value.Value
                             *
-                            f[i.Item1][i.Item2].Value.Value)
+                            f[i.Item1][k].Value.Value)
                         .Sum())))
                 .ToImmutableList();
         }
