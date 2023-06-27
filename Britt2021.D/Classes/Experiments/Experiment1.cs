@@ -560,7 +560,7 @@
         public RedBlackTree<INullableValue<int>, INullableValue<decimal>> ServiceLevelProbabilities { get; }
 
         /// <inheritdoc />
-        public ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <inheritdoc />
         public INullableValue<int> NumberDaysPerWeek { get; }
@@ -1255,7 +1255,7 @@
         }
 
         // Parameter: p(s, l, Λ)
-        private ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
+        private RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> GenerateSurgeonDayScenarioLengthOfStayProbabilitiesVanOostrum2011(
             INullableValueFactory nullableValueFactory,
             IDiscreteUniformFactory discreteUniformFactory,
             IpCalculation pCalculation,
@@ -1314,7 +1314,38 @@
                 }
             }
 
-            return builder.ToImmutableList();
+            //
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> outerRedBlackTree = new(
+                new OrganizationComparer());
+
+            foreach (Organization surgeon in this.Surgeons.Entry.Where(i => i.Resource is Organization).Select(i => (Organization)i.Resource))
+            {
+                RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> firstInnerRedBlackTree = new(
+                    new NullableValueintComparer());
+
+                foreach (INullableValue<int> day in this.LengthOfStayDays)
+                {
+                    RedBlackTree<INullableValue<int>, INullableValue<decimal>> secondInnerRedBlackTree = new(
+                        new NullableValueintComparer());
+
+                    foreach (INullableValue<int> scenario in this.Scenarios)
+                    {
+                        secondInnerRedBlackTree.Add(
+                            scenario,
+                            builder.Where(w => w.Item1 == surgeon && w.Item2 == day && w.Item3 == scenario).Select(w => w.Item4).SingleOrDefault());
+                    }
+
+                    firstInnerRedBlackTree.Add(
+                        day,
+                        secondInnerRedBlackTree);
+                }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    firstInnerRedBlackTree);
+            }
+
+            return outerRedBlackTree;
         }
 
         // Parameter: ψ(t)
@@ -1667,17 +1698,20 @@
 
         // Parameter: p(s, d)
         public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
-            PositiveInt scenario)
+            INullableValue<int> scenario)
         {
             ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
 
-            foreach (Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>> item in this.SurgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item3 == scenario))
+            foreach (Organization surgeon in this.SurgeonDayScenarioLengthOfStayProbabilities.Keys)
             {
-                builder.Add(
-                    Tuple.Create(
-                        item.Item1,
-                        (PositiveInt)this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == item.Item2.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
-                        (FhirDecimal)item.Item4));
+                foreach (INullableValue<int> day in this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon].Keys)
+                {
+                    builder.Add(
+                        Tuple.Create(
+                            surgeon,
+                            (PositiveInt)this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == day.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
+                            (FhirDecimal)this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario]));
+                }
             }
 
             return builder.ToImmutableList();

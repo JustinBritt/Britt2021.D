@@ -138,7 +138,7 @@
         /// Parameter: p(s, l, Λ)
         /// Used in: 3B
         /// </summary>
-        ImmutableList<Tuple<Organization, INullableValue<int>, INullableValue<int>, INullableValue<decimal>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> SurgeonDayScenarioLengthOfStayProbabilities { get; }
 
         /// <summary>
         /// Gets the number of days per week.
@@ -344,7 +344,7 @@
 
         // Parameter: p(s, d)
         ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
-            PositiveInt scenario);
+            INullableValue<int> scenario);
 
         ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
