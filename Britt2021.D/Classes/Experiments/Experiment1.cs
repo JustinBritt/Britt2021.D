@@ -261,16 +261,10 @@
                 this.SurgicalSpecialties);
 
             // WeightedAverageSurgicalDurations
-            // Parameter: h(i, Λ)
+            // Parameter: h(s, Λ)
             // Used in: 2
-            this.WeightedAverageSurgicalDurations = hCalculation.Calculate(
-                this.DurationFactory,
-                this.Clusters,
-                this.Surgeons,
-                this.Scenarios,
-                this.SurgicalFrequencies,
-                this.SurgicalOverheads,
-                this.SurgicalDurations);
+            this.WeightedAverageSurgicalDurations = this.GenerateWeightedAverageSurgicalDurations(
+                hCalculation);
 
             // SurgeonStrategicTargets
             // Parameter: N(s)
@@ -1115,6 +1109,22 @@
             }
 
             return outerRedBlackTree;
+        }
+
+        // Parameter: h(s, Λ)
+        private ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> GenerateWeightedAverageSurgicalDurations(
+            IhCalculation hCalculation)
+        {
+            ImmutableList<Tuple<Organization, INullableValue<int>, Duration>> result = hCalculation.Calculate(
+                this.DurationFactory,
+                this.Clusters,
+                this.Surgeons,
+                this.Scenarios,
+                this.SurgicalFrequencies,
+                this.SurgicalOverheads,
+                this.SurgicalDurations);
+
+            return result;
         }
 
         // Parameter: L(s)
