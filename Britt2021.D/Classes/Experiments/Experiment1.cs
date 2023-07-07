@@ -1778,21 +1778,21 @@
 
         // Ma2013: THR(p)
         public ImmutableList<KeyValuePair<PositiveInt, PositiveInt>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
-            ImmutableList<KeyValuePair<Organization, PositiveInt>> HM1BSurgeonNumberAssignedTimeBlocks,
+            RedBlackTree<Organization, INullableValue<int>> HM1BSurgeonNumberAssignedTimeBlocks,
             ImmutableList<KeyValuePair<PositiveInt, Duration>> Ma2013PatientGroupSurgeryDurations,
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
-            PositiveInt scenario,
-            ImmutableList<KeyValuePair<Organization, PositiveInt>> surgeonStrategicTargets)
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
+            INullableValue<int> scenario,
+            RedBlackTree<Organization, INullableValue<int>> surgeonStrategicTargets)
         {
             ImmutableList<KeyValuePair<Organization, int>>.Builder surgeonGroupNumberPatientsBuilder = ImmutableList.CreateBuilder<KeyValuePair<Organization, int>>();
             
             ImmutableList<KeyValuePair<PositiveInt, PositiveInt>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, PositiveInt>>();
 
-            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
+            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
             {
                 Organization ward = item0.Item1;
 
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> item1 in item0.Item2)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> item1 in item0.Item2)
                 {
                     Organization surgeonGroup = item1.Item1;
 
@@ -1812,11 +1812,11 @@
 
             ImmutableList<KeyValuePair<Organization, int>> surgeonGroupNumberPatients = surgeonGroupNumberPatientsBuilder.ToImmutableList();
 
-            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
+            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
             {
                 Organization ward = item0.Item1;
 
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> item1 in item0.Item2)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> item1 in item0.Item2)
                 {
                     Organization surgeonGroup = item1.Item1;
 
@@ -1895,11 +1895,11 @@
                 }
             }
 
-            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
+            foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> item0 in Ma2013WardSurgeonGroupPatientGroups)
             {
                 Organization ward = item0.Item1;
 
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> item1 in item0.Item2)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> item1 in item0.Item2)
                 {
                     Organization surgeonGroup = item1.Item1;
 
@@ -1921,7 +1921,7 @@
                             i = 0;
                         }
 
-                        PositiveInt patientGroup = item1.Item2[i];
+                        PositiveInt patientGroup = (PositiveInt)item1.Item2[i];
 
                         int patientGroupValue = patientGroup.Value.Value;
 
