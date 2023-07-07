@@ -349,7 +349,7 @@
         ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgicalDurations,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads);
 
         ImmutableList<KeyValuePair<PositiveInt, PositiveInt>> GetMa2013PatientGroupThroughputsEvenlyDistributed(

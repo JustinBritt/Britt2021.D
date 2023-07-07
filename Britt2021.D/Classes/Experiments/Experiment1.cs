@@ -1741,7 +1741,7 @@
         public ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgicalDurations,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads)
         {
             ImmutableList<KeyValuePair<PositiveInt, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, Duration>>();
@@ -1761,7 +1761,7 @@
                         INullableValue<int> cluster = this.Clusters.Where(w => w.Value.Value == patientGroupValue - min + 1).SingleOrDefault();
 
                         Duration duration = this.DurationFactory.CreateHour(
-                            surgicalDurations.Where(w => w.Item1 == surgeon && w.Item2 == cluster && w.Item3 == scenario).Select(w => w.Item4.Value.Value).SingleOrDefault()
+                            surgicalDurations[surgeon][cluster][scenario].Value.Value
                             *
                             surgicalOverheads[surgeon][cluster].Value.Value);
 
