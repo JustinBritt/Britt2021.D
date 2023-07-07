@@ -1700,7 +1700,8 @@
         public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
             INullableValue<int> scenario)
         {
-            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                new Britt2021.D.Classes.Comparers.OrganizationComparer());
 
             foreach (Organization surgeon in this.SurgeonDayScenarioLengthOfStayProbabilities.Keys)
             {
