@@ -1778,7 +1778,7 @@
         // Ma2013: THR(p)
         public ImmutableList<KeyValuePair<PositiveInt, PositiveInt>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
             RedBlackTree<Organization, INullableValue<int>> HM1BSurgeonNumberAssignedTimeBlocks,
-            ImmutableList<KeyValuePair<PositiveInt, Duration>> Ma2013PatientGroupSurgeryDurations,
+            RedBlackTree<INullableValue<int>, Duration> Ma2013PatientGroupSurgeryDurations,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             RedBlackTree<Organization, INullableValue<int>> surgeonStrategicTargets)
