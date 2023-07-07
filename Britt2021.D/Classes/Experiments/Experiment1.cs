@@ -13,6 +13,7 @@
 
     using NGenerics.DataStructures.Trees;
 
+    using Britt2021.D.Classes.Comparers;
     using Britt2021.D.Extensions.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.Interfaces.Calculations;
     using Britt2021.D.Interfaces.Experiments;
@@ -20,8 +21,7 @@
     using Britt2021.D.InterfacesFactories.Comparers;
     using Britt2021.D.InterfacesFactories.Dependencies.Hl7.Fhir.R4.Model;
     using Britt2021.D.InterfacesFactories.Dependencies.MathNet.Numerics.Distributions;
-    using Britt2021.D.Classes.Comparers;
-
+    
     public sealed class Experiment1 : IExperiment1
     {
         private ILog Log => LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
