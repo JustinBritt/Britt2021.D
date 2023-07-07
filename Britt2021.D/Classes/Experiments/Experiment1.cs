@@ -1744,7 +1744,8 @@
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads)
         {
-            RedBlackTree<INullableValue<int>, Duration> redBlackTree = new RedBlackTree<INullableValue<int>, Duration>();
+            RedBlackTree<INullableValue<int>, Duration> redBlackTree = new RedBlackTree<INullableValue<int>, Duration>(
+                new NullableValueintComparer());
 
             foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
