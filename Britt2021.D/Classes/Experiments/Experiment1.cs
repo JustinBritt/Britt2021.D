@@ -1705,7 +1705,8 @@
 
             foreach (Organization surgeon in this.SurgeonDayScenarioLengthOfStayProbabilities.Keys)
             {
-                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>();
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                    new Britt2021.D.Classes.Comparers.NullableValueintComparer());
 
                 foreach (INullableValue<int> day in this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon].Keys)
                 {
