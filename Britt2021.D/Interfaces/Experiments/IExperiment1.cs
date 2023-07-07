@@ -346,7 +346,7 @@
         RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
             INullableValue<int> scenario);
 
-        ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
+        RedBlackTree<INullableValue<int>, Duration> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,

@@ -1738,13 +1738,13 @@
         }
 
         // Ma2013: dur(p)
-        public ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
+        public RedBlackTree<INullableValue<int>, Duration> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads)
         {
-            ImmutableList<KeyValuePair<PositiveInt, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, Duration>>();
+            RedBlackTree<INullableValue<int>, Duration> redBlackTree = new RedBlackTree<INullableValue<int>, Duration>();
 
             foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
@@ -1765,15 +1765,14 @@
                             *
                             surgicalOverheads[surgeon][cluster].Value.Value);
 
-                        builder.Add(
-                            KeyValuePair.Create(
-                                patientGroup,
-                                duration));
+                        redBlackTree.Add(
+                            patientGroup,
+                            duration);
                     }
                 }
             }
 
-            return builder.ToImmutableList();
+            return redBlackTree;
         }
 
         // Ma2013: THR(p)
