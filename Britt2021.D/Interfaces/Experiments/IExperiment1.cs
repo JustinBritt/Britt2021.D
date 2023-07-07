@@ -352,7 +352,7 @@
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads);
 
-        ImmutableList<KeyValuePair<PositiveInt, PositiveInt>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
+        RedBlackTree<INullableValue<int>, INullableValue<int>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
             RedBlackTree<Organization, INullableValue<int>> HM1BSurgeonNumberAssignedTimeBlocks,
             RedBlackTree<INullableValue<int>, Duration> Ma2013PatientGroupSurgeryDurations,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,

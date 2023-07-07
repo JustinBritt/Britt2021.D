@@ -1777,7 +1777,7 @@
         }
 
         // Ma2013: THR(p)
-        public ImmutableList<KeyValuePair<PositiveInt, PositiveInt>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
+        public RedBlackTree<INullableValue<int>, INullableValue<int>> GetMa2013PatientGroupThroughputsEvenlyDistributed(
             RedBlackTree<Organization, INullableValue<int>> HM1BSurgeonNumberAssignedTimeBlocks,
             RedBlackTree<INullableValue<int>, Duration> Ma2013PatientGroupSurgeryDurations,
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
@@ -1962,7 +1962,18 @@
                 }
             }
 
-            return builder.ToImmutableList();
+            //
+            RedBlackTree<INullableValue<int>, INullableValue<int>> redBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<int>>(
+                new NullableValueintComparer());
+
+            foreach (INullableValue<int> patientGroup in this.Ma2013PatientGroups)
+            {
+                redBlackTree.Add(
+                    patientGroup,
+                    builder.Where(w => w.Key.Value.Value == patientGroup.Value.Value).Select(w => (INullableValue<int>)w.Value).SingleOrDefault());
+            }
+
+            return redBlackTree;
         }
 
         // prob(p, l)
