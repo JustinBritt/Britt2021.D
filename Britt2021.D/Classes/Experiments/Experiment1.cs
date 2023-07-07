@@ -2405,7 +2405,7 @@
                 foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in wardSurgeonGroupPatientGroups.Item2)
                 {
                     redBlackTree.Add(
-                        surgeonGroupPatientGroups.Item1,
+                        wardSurgeonGroupPatientGroups.Item1,
                         surgeonGroupPatientGroups.Item2.ToImmutableSortedSet(
                             nullableValueintComparerFactory.Create()));
                 }
