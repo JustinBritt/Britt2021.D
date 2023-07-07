@@ -1740,7 +1740,7 @@
         // Ma2013: dur(p)
         public ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
-            PositiveInt scenario,
+            INullableValue<int> scenario,
             ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgicalDurations,
             ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> surgicalOverheads)
         {
