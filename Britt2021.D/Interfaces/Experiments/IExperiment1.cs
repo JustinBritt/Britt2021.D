@@ -360,8 +360,8 @@
             ImmutableList<KeyValuePair<Organization, PositiveInt>> surgeonStrategicTargets);
 
         ImmutableList<Tuple<PositiveInt, PositiveInt, FhirDecimal>> GetMa2013PatientGroupDayLengthOfStayProbabilities(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
-            PositiveInt scenario,
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgeonDayScenarioLengthOfStayProbabilities);
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
+            INullableValue<int> scenario,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgeonDayScenarioLengthOfStayProbabilities);
     }
 }

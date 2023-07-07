@@ -1967,15 +1967,15 @@
 
         // prob(p, l)
         public ImmutableList<Tuple<PositiveInt, PositiveInt, FhirDecimal>> GetMa2013PatientGroupDayLengthOfStayProbabilities(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
-            PositiveInt scenario,
-            ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgeonDayScenarioLengthOfStayProbabilities)
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
+            INullableValue<int> scenario,
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgeonDayScenarioLengthOfStayProbabilities)
         {
             ImmutableList<Tuple<PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<PositiveInt, PositiveInt, FhirDecimal>>();
 
-            foreach (ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
+            foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> surgeonGroupPatientGroups in item)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in item)
                 {
                     Organization surgeon = surgeonGroupPatientGroups.Item1;
 
@@ -1983,7 +1983,7 @@
                     {
                         foreach (PositiveInt day in this.LengthOfStayDays)
                         {
-                            FhirDecimal probability = surgeonDayScenarioLengthOfStayProbabilities.Where(w => w.Item1 == surgeon && w.Item2 == day && w.Item3 == scenario).Select(w => w.Item4).SingleOrDefault();
+                            FhirDecimal probability = (FhirDecimal)surgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario];
 
                             builder.Add(
                                 Tuple.Create(
