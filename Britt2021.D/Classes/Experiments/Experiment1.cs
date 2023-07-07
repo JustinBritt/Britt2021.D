@@ -1739,16 +1739,16 @@
 
         // Ma2013: dur(p)
         public ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
-            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
+            ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgicalDurations,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads)
         {
             ImmutableList<KeyValuePair<PositiveInt, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, Duration>>();
 
-            foreach (ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
+            foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
-                foreach (Tuple<Organization, ImmutableList<PositiveInt>> surgeonGroupPatientGroups in item)
+                foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in item)
                 {
                     Organization surgeon = surgeonGroupPatientGroups.Item1;
 
