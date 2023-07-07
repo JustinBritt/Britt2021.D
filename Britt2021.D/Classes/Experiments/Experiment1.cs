@@ -1990,16 +1990,16 @@
                 {
                     Organization surgeon = surgeonGroupPatientGroups.Item1;
 
-                    foreach (PositiveInt patientGroup in surgeonGroupPatientGroups.Item2)
+                    foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
-                        foreach (PositiveInt day in this.LengthOfStayDays)
+                        foreach (INullableValue<int> day in this.LengthOfStayDays)
                         {
                             FhirDecimal probability = (FhirDecimal)surgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario];
 
                             builder.Add(
                                 Tuple.Create(
-                                    patientGroup,
-                                    day,
+                                    (PositiveInt)patientGroup,
+                                    (PositiveInt)day,
                                     probability));
                         }
                     }
