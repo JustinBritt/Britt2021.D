@@ -1977,12 +1977,13 @@
         }
 
         // prob(p, l)
-        public ImmutableList<Tuple<PositiveInt, PositiveInt, FhirDecimal>> GetMa2013PatientGroupDayLengthOfStayProbabilities(
+        public RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GetMa2013PatientGroupDayLengthOfStayProbabilities(
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             RedBlackTree<Organization, RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>> surgeonDayScenarioLengthOfStayProbabilities)
         {
-            ImmutableList<Tuple<PositiveInt, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<PositiveInt, PositiveInt, FhirDecimal>>();
+            RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<INullableValue<int>, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>(
+                new NullableValueintComparer());
 
             foreach (ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>> item in Ma2013WardSurgeonGroupPatientGroups.Select(w => w.Item2))
             {
@@ -1992,21 +1993,26 @@
 
                     foreach (INullableValue<int> patientGroup in surgeonGroupPatientGroups.Item2)
                     {
+                        RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>(
+                                new NullableValueintComparer());
+
                         foreach (INullableValue<int> day in this.LengthOfStayDays)
                         {
                             FhirDecimal probability = (FhirDecimal)surgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario];
 
-                            builder.Add(
-                                Tuple.Create(
-                                    (PositiveInt)patientGroup,
-                                    (PositiveInt)day,
-                                    probability));
+                            innerRedBlackTree.Add(
+                                day,
+                                probability);
                         }
+
+                        outerRedBlackTree.Add(
+                            patientGroup,
+                            innerRedBlackTree);
                     }
                 }
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         private Organization GetSurgeonWithId(
