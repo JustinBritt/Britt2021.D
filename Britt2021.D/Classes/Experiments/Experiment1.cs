@@ -1697,24 +1697,28 @@
         }
 
         // Parameter: p(s, d)
-        public ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
+        public RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
             INullableValue<int> scenario)
         {
-            ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>>.Builder builder = ImmutableList.CreateBuilder<Tuple<Organization, PositiveInt, FhirDecimal>>();
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> outerRedBlackTree = new RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>>();
 
             foreach (Organization surgeon in this.SurgeonDayScenarioLengthOfStayProbabilities.Keys)
             {
+                RedBlackTree<INullableValue<int>, INullableValue<decimal>> innerRedBlackTree = new RedBlackTree<INullableValue<int>, INullableValue<decimal>>();
+
                 foreach (INullableValue<int> day in this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon].Keys)
                 {
-                    builder.Add(
-                        Tuple.Create(
-                            surgeon,
-                            (PositiveInt)this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == day.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
-                            (FhirDecimal)this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario]));
+                    innerRedBlackTree.Add(
+                        this.Belien2007LengthOfStayDays.Where(y => y.Value.Value == day.Value.Value + 1).SingleOrDefault(), // Shift up by 1; Day d in HM is day d+1 in Belien2007
+                        this.SurgeonDayScenarioLengthOfStayProbabilities[surgeon][day][scenario]);
                 }
+
+                outerRedBlackTree.Add(
+                    surgeon,
+                    innerRedBlackTree);
             }
 
-            return builder.ToImmutableList();
+            return outerRedBlackTree;
         }
 
         // Belien2007: wMean

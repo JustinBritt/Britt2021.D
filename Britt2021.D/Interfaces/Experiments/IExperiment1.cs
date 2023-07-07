@@ -343,7 +343,7 @@
         INullableValue<decimal> GetBelien2007VarianceWeightSMIP1();
 
         // Parameter: p(s, d)
-        ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
+        RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> GetBelien2007SurgeonDayLengthOfStayProbabilities(
             INullableValue<int> scenario);
 
         ImmutableList<KeyValuePair<PositiveInt, Duration>> GetMa2013PatientGroupSurgeryDurations(
