@@ -2402,13 +2402,18 @@
 
             foreach (Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<INullableValue<int>>>>> wardSurgeonGroupPatientGroups in Ma2013WardSurgeonGroupPatientGroups)
             {
+                List<INullableValue<int>> list = new List<INullableValue<int>>();
+
                 foreach (Tuple<Organization, ImmutableList<INullableValue<int>>> surgeonGroupPatientGroups in wardSurgeonGroupPatientGroups.Item2)
                 {
-                    redBlackTree.Add(
-                        wardSurgeonGroupPatientGroups.Item1,
-                        surgeonGroupPatientGroups.Item2.ToImmutableSortedSet(
-                            nullableValueintComparerFactory.Create()));
+                    list.AddRange(
+                        surgeonGroupPatientGroups.Item2);
                 }
+
+                redBlackTree.Add(
+                    wardSurgeonGroupPatientGroups.Item1,
+                    list.ToImmutableSortedSet(
+                        nullableValueintComparerFactory.Create()));
             }
 
             return redBlackTree;
