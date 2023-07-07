@@ -1742,7 +1742,7 @@
             ImmutableList<Tuple<Organization, ImmutableList<Tuple<Organization, ImmutableList<PositiveInt>>>>> Ma2013WardSurgeonGroupPatientGroups,
             INullableValue<int> scenario,
             ImmutableList<Tuple<Organization, PositiveInt, PositiveInt, FhirDecimal>> surgicalDurations,
-            ImmutableList<Tuple<Organization, PositiveInt, FhirDecimal>> surgicalOverheads)
+            RedBlackTree<Organization, RedBlackTree<INullableValue<int>, INullableValue<decimal>>> surgicalOverheads)
         {
             ImmutableList<KeyValuePair<PositiveInt, Duration>>.Builder builder = ImmutableList.CreateBuilder<KeyValuePair<PositiveInt, Duration>>();
 
@@ -1763,7 +1763,7 @@
                         Duration duration = this.DurationFactory.CreateHour(
                             surgicalDurations.Where(w => w.Item1 == surgeon && w.Item2 == cluster && w.Item3 == scenario).Select(w => w.Item4.Value.Value).SingleOrDefault()
                             *
-                            surgicalOverheads.Where(w => w.Item1 == surgeon && w.Item2 == cluster).Select(w => w.Item3.Value.Value).SingleOrDefault());
+                            surgicalOverheads[surgeon][cluster].Value.Value);
 
                         builder.Add(
                             KeyValuePair.Create(
